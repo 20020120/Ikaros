@@ -3,6 +3,7 @@
 #include "Bullet.h"
 #include "EnemyManager.h"
 #include "GameSystem.h"
+#include "OptionSystem.h"
 #include "ProjectileManager.h"
 
 void Boss_5::Behavior(float elapsed_time)
@@ -431,6 +432,9 @@ void Boss_5::T_Shot(float elapsedTime)
 
         if (StackAttackInterval >= 0.4f)
         {
+            se[BLUE_BULLET_SHOT]->Stop();
+            se[BLUE_BULLET_SHOT]->Play(false,
+                OptionSystem::Instance().GetSeVolume() * ShotVolume);
             auto b0 = new StayToTargetBullet(BaseProjectile::Parent::REDENEMY, t.Position, 1, { -20.0f,0.0f,10.0f });
             ProjectileManager::Instance().RegisterProjectile(b0);
             StackAttackInterval = 0.0f;
@@ -556,7 +560,10 @@ void Boss_5::S_Shot(float elapsedTime)
         {
             
             se[BLUE_BULLET_SHOT]->Stop();
-            se[BLUE_BULLET_SHOT]->Play(false);
+           
+            se[BLUE_BULLET_SHOT]->Play(false,
+                OptionSystem::Instance().GetSeVolume() * ShotVolume);
+
             auto b1 = new StayToTargetBullet(BaseProjectile::Parent::REDENEMY, t.Position, 1, { 0.0f,20.0f,-10.0f }, 1.6f);
             ProjectileManager::Instance().RegisterProjectile(b1);
 

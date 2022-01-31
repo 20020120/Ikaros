@@ -568,7 +568,7 @@ void EnemyManager::Remove(Enemy* enemy)
 void EnemyManager::Death(Enemy* enemy)
 {
     se_Bomb->Stop();
-    se_Bomb->Play(false, OptionSystem::Instance().GetSeVolume() * 0.5f);
+    se_Bomb->Play(false, OptionSystem::Instance().GetSeVolume() * 0.8f);
 
     removes.emplace_back(enemy);
 }

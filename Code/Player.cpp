@@ -97,13 +97,13 @@ Player::Player(ID3D11Device* d)
     
 
     volumes.emplace_back(0.9f);//ModeChange
-    volumes.emplace_back(0.75f);//HitSameColor
-    volumes.emplace_back(0.75f);//HitDifferentColor
+    volumes.emplace_back(0.9f);//HitSameColor
+    volumes.emplace_back(0.9f);//HitDifferentColor
     volumes.emplace_back(0.5f);//HitInvincible
     volumes.emplace_back(0.5f);//CloseAttack
     volumes.emplace_back(1.0f);//GetEnergy
-    volumes.emplace_back(0.4f);//RedBulletShot
-    volumes.emplace_back(0.2f);//BlueBulletShot
+    volumes.emplace_back(0.5f);//RedBulletShot
+    volumes.emplace_back(0.3f);//BlueBulletShot
     volumes.emplace_back(0.75f);//Dodge
     volumes.emplace_back(0.75f);//CriticalDodge
     volumes.emplace_back(1.0f);//Heal
@@ -398,7 +398,7 @@ void Player::Render(ID3D11DeviceContext* dc)
     //particleEmitter.Render(dc);
     // –³“GŽžŠÔ‚Ì•\Œ»
 
-    if (IsInvincible)
+    if (!IsFinisher&&IsInvincible)
     {
         const int IntTime = static_cast<int>((StackInvincibleTime) * 10.0f);
         switch (IntTime % 3)
@@ -1164,7 +1164,7 @@ void Player::InputCloseAttack(float elapsedTime)
                     hdl_BlueSlash = efk_BlueSlash->Play(t.Position, efkAngle, 0.15f);
                     break;
                 default:;
-                }
+                }\
 
                 switch (GameSystem::Instance().GetCameraDirection())
                 {
