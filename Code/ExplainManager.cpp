@@ -873,7 +873,7 @@ void ExplainManager::RenderNoneExp(ID3D11DeviceContext* dc)
          // ƒ`ƒ…[ƒgƒŠƒAƒ‹‚ÌðŒ•¶
          font->Begin(dc);
          // ŽËŒ‚‚Å“G‚ð“|‚·
-         font->Draw({ 890.0f,45.0f }, { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f }, L"ŽËŒ‚‚Å“G‚ð“|‚·(Bƒ{ƒ^ƒ“)", wcslen(L"ŽËŒ‚‚Å“G‚ð“|‚·(Bƒ{ƒ^ƒ“)"), Font::TEXT_ALIGN::UPPER_LEFT);
+         font->Draw({ 890.0f,45.0f }, { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f }, L"ŽËŒ‚‚Å“G‚ð“|‚·(Xƒ{ƒ^ƒ“)", wcslen(L"ŽËŒ‚‚Å“G‚ð“|‚·(Xƒ{ƒ^ƒ“)"), Font::TEXT_ALIGN::UPPER_LEFT);
 
          font->Draw({ 890.0f,105.0f }, { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f }, L"‹ßÚUŒ‚‚Å“G‚ð“|‚·(Aƒ{ƒ^ƒ“)", wcslen(L"‹ßÚUŒ‚‚Å“G‚ð“|‚·(Aƒ{ƒ^ƒ“)"), Font::TEXT_ALIGN::UPPER_LEFT);
          // ‹ßÚUŒ‚‚Å“G‚ð“|‚·
@@ -944,7 +944,7 @@ void ExplainManager::RenderNoneExp(ID3D11DeviceContext* dc)
          // ƒ`ƒ…[ƒgƒŠƒAƒ‹‚ÌðŒ•¶
          font->Begin(dc);
          // UŒ‚‚ðƒMƒŠƒMƒŠ‚Å‰ñ”ð‚·‚é
-         font->Draw({ 890.0f,45.0f }, { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f }, L"’e‚ðƒMƒŠƒMƒŠ‚Å‰ñ”ð‚·‚é(Yƒ{ƒ^ƒ“)", wcslen(L"’e‚ðƒMƒŠƒMƒŠ‚Å‰ñ”ð‚·‚é(Yƒ{ƒ^ƒ“)"), Font::TEXT_ALIGN::UPPER_LEFT);
+         font->Draw({ 890.0f,45.0f }, { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f }, L"’e‚ðƒMƒŠƒMƒŠ‚Å‰ñ”ð‚·‚é(RƒgƒŠƒK[)", wcslen(L"’e‚ðƒMƒŠƒMƒŠ‚Å‰ñ”ð‚·‚é(RƒgƒŠƒK[)"), Font::TEXT_ALIGN::UPPER_LEFT);
 
          std::wstring a = std::to_wstring(std::max(3 - DodgeCounts, 0));
          font->Draw({ 880.0f,85.0f }, { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f }, L"Žc‚è", wcslen(L"Žc‚è"), Font::TEXT_ALIGN::UPPER_LEFT);
@@ -1030,7 +1030,7 @@ void ExplainManager::RenderNoneExp(ID3D11DeviceContext* dc)
          // ƒ`ƒ…[ƒgƒŠƒAƒ‹‚ÌðŒ•¶
          font->Begin(dc);
          font->Draw({ 890.0f,45.0f }, { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f }, L"ƒQ[ƒW‚ð—­‚ß‚Ä", wcslen(L"ƒQ[ƒW‚ð—­‚ß‚Ä"), Font::TEXT_ALIGN::UPPER_LEFT);
-         font->Draw({ 890.0f,85.0f }, { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f }, L"Rƒ{ƒ^ƒ“/ƒgƒŠƒK[‚Å‘®«‚ð•Ï‚¦‚é", wcslen(L"Rƒ{ƒ^ƒ“/ƒgƒŠƒK[‚Å‘®«‚ð•Ï‚¦‚é"), Font::TEXT_ALIGN::UPPER_LEFT);
+         font->Draw({ 890.0f,85.0f }, { 0.5f,0.5f }, { 1.0f,1.0f,1.0f,1.0f }, L"Lƒ{ƒ^ƒ“/ƒgƒŠƒK[‚Å‘®«‚ð•Ï‚¦‚é", wcslen(L"Lƒ{ƒ^ƒ“/ƒgƒŠƒK[‚Å‘®«‚ð•Ï‚¦‚é"), Font::TEXT_ALIGN::UPPER_LEFT);
          font->End(dc);
 
          spr_Element1Exp2.Render(dc);

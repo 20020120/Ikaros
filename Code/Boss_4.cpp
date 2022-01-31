@@ -477,6 +477,7 @@ void Boss_4::LastMotion(float elapsedTime)
     {
         t.Position = { 0.0f,0.0f,50.0f };
         IsDraw = false;
+        mPointLight->SetRange(0.0f);
     }
     else if (State == 6)
     {

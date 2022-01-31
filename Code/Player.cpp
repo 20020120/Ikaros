@@ -675,7 +675,8 @@ void Player::inputDodge(float elapsedTime)
     if (CanDodge && !ReadyDodge&& !IsSlash)
     {
         //  回避する
-        if(GamePad::Instance().GetButtonDown() &GamePad::BTN_Y)
+        if(GamePad::Instance().GetButtonDown() &
+            (GamePad::BTN_RIGHT_SHOULDER| GamePad::BTN_RIGHT_TRIGGER))
         {
             DodgeVecX = GetMoveVec().x;
             DodgeVecY = GetMoveVec().y;
@@ -820,7 +821,7 @@ void Player::UpdateEnergy()
     if (EnergyGauge > MaxEnergyCount)EnergyGauge = MaxEnergyCount;
     else if (EnergyGauge < MinEnergyCount)EnergyGauge = MinEnergyCount;
 
-    const GamePadButton transformationButton = GamePad::BTN_RIGHT_TRIGGER | GamePad::BTN_RIGHT_SHOULDER;
+    const GamePadButton transformationButton = GamePad::BTN_LEFT_SHOULDER | GamePad::BTN_LEFT_TRIGGER;
 
     if (GamePad::Instance().GetButtonDown() & transformationButton&&EnemyManager::Instance().IsPlayerTransformable())
     {
@@ -906,7 +907,7 @@ void Player::InputShooting(float elapsedTime)
     if(CanShoot&&!IsFinisher&&!IsSlash)
     {
         //  射撃する
-        if (GamePad::Instance().GetButton() & GamePad::BTN_B)
+        if (GamePad::Instance().GetButton() & GamePad::BTN_X)
         {
             // デバイスを取得
             const auto& device = SceneManager::Instance().GetDevice();
@@ -1164,7 +1165,7 @@ void Player::InputCloseAttack(float elapsedTime)
                     hdl_BlueSlash = efk_BlueSlash->Play(t.Position, efkAngle, 0.15f);
                     break;
                 default:;
-                }\
+                }
 
                 switch (GameSystem::Instance().GetCameraDirection())
                 {

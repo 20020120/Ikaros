@@ -6,6 +6,7 @@
 #include "ProjectileManager.h"
 #include "SceneManager.h"
 #include"MathSupport.h"
+#include "OptionSystem.h"
 #include"User_Function.h"
 
 
@@ -261,14 +262,16 @@ void Boss_6::Initialize()
     BehaviorVec[SIDE].emplace_back(vec);
     vec.clear();
 
+    vec.emplace_back(&Boss_6::S_DiffuseShot);
     vec.emplace_back(&Boss_6::S_SummonEnemy);
     vec.emplace_back(&Boss_6::AppealTime);
+    vec.emplace_back(&Boss_6::S_Boonmerang);
     vec.emplace_back(&Boss_6::EndAttack);
     BehaviorVec[SIDE].emplace_back(vec);
     vec.clear();
 
-
-    vec.emplace_back(&Boss_6::S_SummonEnemy);
+    vec.emplace_back(&Boss_6::S_Boonmerang);
+    vec.emplace_back(&Boss_6::AppealTime);
     vec.emplace_back(&Boss_6::T_Horming);
     vec.emplace_back(&Boss_6::EndAttack);
     BehaviorVec[SIDE].emplace_back(vec);
@@ -396,6 +399,7 @@ void Boss_6::LastMotion(float elapsedTime)
     {
         t.Position = { 0.0f,0.0f,50.0f };
         IsDraw = false;
+        mPointLight->SetRange(0.0f);
     }
     else if (State == 6)
     {
@@ -625,6 +629,9 @@ void Boss_6::T_StepAllRangeAttack(float elapsedTime)
     case 1:
       // ‘Å‚Â
     {
+        se[BLUE_BULLET_SHOT]->Stop();
+        se[BLUE_BULLET_SHOT]->Play(false,
+            OptionSystem::Instance().GetSeVolume() * ShotVolume);
         ID3D11Device* p_device = SceneManager::Instance().GetDevice();
         const int Max = 10;
         // ‘S‘Ì‚ÉUŒ‚
@@ -659,6 +666,9 @@ void Boss_6::T_StepAllRangeAttack(float elapsedTime)
         // Œ‚‚Â
           // ‘Å‚Â
     {
+        se[BLUE_BULLET_SHOT]->Stop();
+        se[BLUE_BULLET_SHOT]->Play(false,
+            OptionSystem::Instance().GetSeVolume() * ShotVolume);
         ID3D11Device* p_device = SceneManager::Instance().GetDevice();
         const int Max = 10;
         // ‘S‘Ì‚ÉUŒ‚
@@ -693,6 +703,9 @@ void Boss_6::T_StepAllRangeAttack(float elapsedTime)
     case 5:
         // ‘Å‚Â
     {
+        se[BLUE_BULLET_SHOT]->Stop();
+        se[BLUE_BULLET_SHOT]->Play(false,
+            OptionSystem::Instance().GetSeVolume() * ShotVolume);
         ID3D11Device* p_device = SceneManager::Instance().GetDevice();
         const int Max = 10;
         // ‘S‘Ì‚ÉUŒ‚
@@ -1015,6 +1028,9 @@ void Boss_6::S_Boonmerang(float elapsedTime)
 
         if (StackAttackInterval >= 0.25f)
         {
+            se[BLUE_BULLET_SHOT]->Stop();
+            se[BLUE_BULLET_SHOT]->Play(false,
+                OptionSystem::Instance().GetSeVolume() * ShotVolume);
             auto b0 = new BoomerangBullet(BaseProjectile::Parent::BLUEENEMY, t.Position, { 0.0f,30.0f,-90.0f });
             ProjectileManager::Instance().RegisterProjectile(b0);
             auto b1 = new BoomerangBullet(BaseProjectile::Parent::BLUEENEMY, t.Position, { 0.0f,25.0f,-80.0f });

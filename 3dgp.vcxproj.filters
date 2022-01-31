@@ -157,6 +157,9 @@
     <Filter Include="resource">
       <UniqueIdentifier>{c4d07135-0018-4850-99ae-6cc98125c0f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\GameSource\Scene\SceneCredit">
+      <UniqueIdentifier>{a329cbe4-ef94-47bd-939b-72928df12a14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="imgui\imgui.cpp">
@@ -464,6 +467,9 @@
     </ClCompile>
     <ClCompile Include="Code\Camera.cpp">
       <Filter>source\GameSource</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\SceneCredit.cpp">
+      <Filter>source\GameSource\Scene\SceneCredit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -829,6 +835,9 @@
     </ClInclude>
     <ClInclude Include="Code\ZoomBlur.h">
       <Filter>source\Graphic\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\SceneCredit.h">
+      <Filter>source\GameSource\Scene\SceneCredit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
