@@ -18,10 +18,21 @@ void TitleManager::Initialize(ID3D11Device* device)
     //SprTitle = new Sprite_Batch(device, L"./resources/Speite/Title/NoTitle.png", 1);
     SprTitle        = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Title/title_logo.png", 1);
     font            = std::make_unique<Font>(device, "./resources/Sprite/Font/Font.fnt", 2048);
-    SprSelect[0]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Title/title_logo.png", 1);
-    SprSelect[1]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Title/title_logo.png", 1);
-    SprSelect[2]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Title/title_logo.png", 1);
-    SprSelect[3]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Title/title_logo.png", 1);
+
+    //wstring FontFilePath = L"./resources/Sprite/Font/TitleFont/";
+    SprSelect[0]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Font/TitleFont/Start.png"       , 1);
+    SprSelect[1]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Font/TitleFont/Option.png"      , 1);
+    SprSelect[2]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Font/TitleFont/Ranking.png"     , 1);
+    SprSelect[3]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Font/TitleFont/Quit.png"        , 1);
+    SprSelect[4]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Font/TitleFont/Tutorial.png"    , 1);
+    SprSelect[5]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Font/TitleFont/StageSelect.png" , 1);
+    SprSelect[6]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Font/TitleFont/Back.png"        , 1);
+    SprSelect[7]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Font/TitleFont/Stage1.png"      , 1);
+    SprSelect[8]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Font/TitleFont/Stage2.png"      , 1);
+    SprSelect[9]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Font/TitleFont/Stage3.png"      , 1);
+    SprSelect[10]   = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Font/TitleFont/Extra1.png"      , 1);
+    SprSelect[11]   = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Font/TitleFont/Extra2.png"      , 1);
+    SprSelect[12]   = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Font/TitleFont/Back.png"        , 1);
 
     // プレイヤーモデル
     ModelRenderInitializer Ini;
@@ -254,7 +265,7 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
     if (current_state_index == STATE::END) return;
     if (current_state_index == STATE::OPTION) return;
 
-    font->Begin(dc);
+    //font->Begin(dc);
 
 
     // タイトル名
@@ -290,32 +301,38 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
     float alpha[13] = { 0.5f,0.5f,0.5f,0.5f,0.5f, 0.5f,0.5f,0.5f,0.5f,0.5f, 0.5f,0.5f,0.5f/*,0.5f,0.5f*//*,0.5f*/ };
 
     constexpr DirectX::XMFLOAT2 pos = { 950.0f,400.0f };
-    constexpr float height = 40.0f;
+    constexpr DirectX::XMFLOAT2 scale = { 0.7f,0.7f };
+    //constexpr float height = 40.0f;
+
+    const float tex_size_x  = SprSelect[0]->GetTextureWidth(); 
+    const float tex_size_y  = SprSelect[0]->GetTextureHeight() * 0.167f; // 0.167f = 1 / 6
+    const float height      = tex_size_y - 5.0f;
 
     // タイトル画面のフォント
     if(current_state_index == STATE::TITLE)
     {
         alpha[input->GetStateIndex()] = 1.0f;
 
-        //const float tex_size_x  = SprSelect[0]->GetTextureWidth();
-        //const float tex_size_y  = SprSelect[0]->GetTextureHeight();
+        
         for(int i = 0; i < 4;++i)
         {
-            //SprSelect[i]->Begin(dc);
-            //SprSelect[i]->render(dc,
-            //    pos.x, pos.y + i * height,
-            //    1.0f,1.0f ,
-            //    tex_size_x, tex_size_y,
-            //    1.0f,1.0f,1.0f,alpha[i],
-            //    0.0f);
-            //SprSelect[i]->End(dc);
+            SprSelect[i]->Begin(dc);
+            SprSelect[i]->Render(dc,
+                pos.x, pos.y + i * height,
+                scale.x, scale.y,
+                0.0f,0.0f,
+                tex_size_x, tex_size_y,
+                0.0f,0.0f,
+                0.0f,
+                1.0f,1.0f,1.0f,alpha[i]);
+            SprSelect[i]->End(dc);
 
-            text_length = wcslen(button[i]);
-            font->Draw({ pos.x, pos.y + i * height },
-                { 1.0f,1.0f },
-                {1.0f,1.0f,1.0f,alpha[i]},
-                button[i],
-                text_length);
+            //text_length = wcslen(button[i]);
+            //font->Draw({ pos.x, pos.y + i * height },
+            //    { 1.0f,1.0f },
+            //    {1.0f,1.0f,1.0f,alpha[i]},
+            //    button[i],
+            //    text_length);
         }
 
     }
@@ -391,9 +408,9 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
         }
 
         // 表示位置の補間用変数
-        const float& time = lerp_timer;
-        const float ratio = time / lerp_timer_max;
-        const float inverse_ratio = 1.0f - ratio;
+        // const float& time = lerp_timer;
+        // const float ratio = time / lerp_timer_max;
+        // const float inverse_ratio = 1.0f - ratio;
 
 
         // 描画
@@ -404,28 +421,54 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
             // スタート画面
             if (i < 3)
             {
-                text_length = wcslen(button[i + 4]);
-                font->Draw({ pos.x + -target_translate.x * inverse_ratio, pos.y + i * height + -target_translate.y * inverse_ratio },
-                    { 1.0f,1.0f },
-                    { 1.0f,1.0f,1.0f,alpha[i + 4] },
-                    button[i + 4],
-                    text_length);
+                //text_length = wcslen(button[i + 4]);
+                //font->Draw({ pos.x + -target_translate.x * inverse_ratio, pos.y + i * height + -target_translate.y * inverse_ratio },
+                //    { 1.0f,1.0f },
+                //    { 1.0f,1.0f,1.0f,alpha[i + 4] },
+                //    button[i + 4],
+                //    text_length);
+
+                const int j = i + 4;
+
+                SprSelect[j]->Begin(dc);
+                SprSelect[j]->Render(dc,
+                    pos.x, pos.y + i * height,
+                    scale.x, scale.y,
+                    0.0f, 0.0f,
+                    tex_size_x, tex_size_y,
+                    0.0f, 0.0f,
+                    0.0f,
+                    1.0f, 1.0f, 1.0f, alpha[j]);
+                SprSelect[j]->End(dc);
             }
             
             constexpr float pudding = -40.0f;
 
             // ステージ選択画面
-            text_length = wcslen(button[i + 7]);
-            font->Draw({ pos.x + target_translate.x * ratio, pos.y + i * height + target_translate.y * ratio + pudding },
-                { 1.0f,1.0f },
-                { 1.0f,1.0f,1.0f,alpha[i + 7] },
-                button[i + 7],
-                text_length);
+            //text_length = wcslen(button[i + 7]);
+            //font->Draw({ pos.x + target_translate.x * ratio, pos.y + i * height + target_translate.y * ratio + pudding },
+            //    { 1.0f,1.0f },
+            //    { 1.0f,1.0f,1.0f,alpha[i + 7] },
+            //    button[i + 7],
+            //    text_length);
+
+            const int k = i + 7;
+
+            SprSelect[k]->Begin(dc);
+            SprSelect[k]->Render(dc,
+                pos.x, pos.y + i * height,
+                scale.x, scale.y,
+                0.0f, 0.0f,
+                tex_size_x, tex_size_y,
+                0.0f, 0.0f,
+                0.0f,
+                1.0f, 1.0f, 1.0f, alpha[k]);
+            SprSelect[k]->End(dc);
 
         }
     }
 
-    font->End(dc);
+    //font->End(dc);
 
     
 }
