@@ -38,7 +38,7 @@ void Boss_4::Behavior(float elapsed_time)
         break;
     default: ; }
 
-    ChangeView();
+    ChangeView(elapsed_time);
 
     if (IsPerformance)
     {
@@ -320,6 +320,7 @@ void Boss_4::Initialize()
     vec.clear();
 
     status.hitPoint = MaxHitPoint;
+    IsRoar = false;
 }
 
 void Boss_4::Render(ID3D11DeviceContext* dc)
@@ -494,7 +495,7 @@ void Boss_4::LastMotion(float elapsedTime)
         }
     }
 }
-void Boss_4::ChangeView()
+void Boss_4::ChangeView(float elapsedTime)
 {
     // 視点変更完了後のⅠフレーム処理
     if (!CompleteChangeView && !GameSystem::Instance().GetChangingView())
@@ -503,8 +504,9 @@ void Boss_4::ChangeView()
         CompleteChangeView = true;
         CompleteAttack = false;
         CurrentAttackNumber = 0;
-        se[0]->Play(false);
-
+        ZoomUp = false;
+        ZoomPower = 0.0f;
+        EnemyManager::Instance().fSetZoomPower(ZoomPower);
         switch (CurrentMode) {
         case TOP:
             break;
@@ -529,7 +531,9 @@ void Boss_4::ChangeView()
         {
             IsPerformance = true;
             r.Angle = { 0.0f,DirectX::XMConvertToRadians(180.0f),0.0f };
-
+            ZoomPower = 0.0f;
+            ZoomUp = true;
+            IsRoar = false;
             switch (CurrentMode) {
             case TOP:
                 CurrentMode = SIDE;
@@ -551,7 +555,30 @@ void Boss_4::ChangeView()
         }
     }
 
-
+    ZoomPower += elapsedTime;
+    if (ZoomPower >= 0.5f)
+    {
+        if (!ZoomUp)
+        {
+            ZoomPower -= elapsedTime * 100.0f;
+            ZoomPower = std::max(ZoomPower, 0.0f);
+        }
+        else
+        {
+            if(!IsRoar)
+            {
+                se[0]->Play(false);
+                IsRoar = true;
+            }
+            
+            ZoomPower += elapsedTime * 100.0f;
+            ZoomPower = std::min(ZoomPower, 100.0f);
+            if (ZoomPower >= 100.0f)
+            {
+                ZoomUp = false;
+            }
+        }
+    }
 
     if (IsInputChangeView)
     {
@@ -1224,6 +1251,12 @@ void Boss_4::FirstMotion(float elapsedTime)
         }
         else
         {
+            if(!IsRoar)
+            {
+                se[0]->Play(false);
+                IsRoar = true;
+            }
+            
             ZoomPower += elapsedTime * 100.0f;
             ZoomPower = std::min(ZoomPower, 100.0f);
             if (ZoomPower >= 100.0f)

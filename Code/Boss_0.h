@@ -32,7 +32,7 @@ private:
     void GuiMenu();
 
     // ボスから視点を変更
-    void ChangeView();
+    void ChangeView(float elapsedTime);
 
     void Shot_ShotRadian(BaseProjectile::Parent p,DirectX::XMFLOAT3 Radian); // 射撃角度を使って射撃
 
@@ -93,6 +93,9 @@ private:
     const float LimitRight = {45.0f};
     const float LimitLeft = {-45.0f};
 
+    float ZoomPower{};
+    bool ZoomUp{};
+    bool IsRoar{};
 
     //--------------------<攻撃に関する変数>--------------------//
 

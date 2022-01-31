@@ -86,7 +86,7 @@ public:
 
     bool GetIsMove(); // 移動しているかどうか
     bool GetTutorial_IsBreakCloseAttack() { return Tutorial_IsBreakCloseAttack; }
-    bool GetCompleteDodgeTutorial()  { return CompleteDodgeTutorial; }
+    bool GetCompleteDodgeTutorial() { return CompleteDodgeTutorial; }
     bool GetCompleteElement1Tutorial() const { return CompleteElement1Tutorial; }
     void SetIsTutorial(bool a) { IsTutorial = a; }
     void ReSetCompleteDodgeTutorial() { CompleteDodgeTutorial = false; }
@@ -179,7 +179,7 @@ private:
     //全ての敵にダメージを与える
     void AttackAllEnemy(float damage);
 
-    
+
 
     // 残像の計算
     void CalcAfterImage(float elapsedTime);
@@ -318,7 +318,7 @@ private:
         Side,
         Top,
     }SlashDir{};
-    
+
 
     float StackAfterImageTime{};
 
@@ -338,8 +338,7 @@ private:
 
     //--------------------<カメラ>--------------------//
     bool AttentionCamera{}; // カメラを注目させる
-    std::function<void()> mCameraShakeFunc{nullptr};
-
+    std::function<void()> mCameraShakeFunc{ nullptr };
     // デバッグ用
     bool IsDebug{ false };
 
@@ -348,7 +347,7 @@ private:
     // スプライト
     std::unique_ptr<Sprite_Batch> spr_HitArea;
     Renderer sprBlackCurtain{}; // 暗転用の幕
-    
+
 
     // イベントフラグ
     EventFlagSystem Flags;
@@ -374,7 +373,7 @@ private:
     std::vector<float> volumes;
     enum SE
     {
-	    MODE_CHANGE, 
+        MODE_CHANGE,
         HIT_SAME_COLOR,
         HIT_DIFFERENT_COLOR,
         HIT_INVINCIBLE,
@@ -428,9 +427,8 @@ private:
     std::unique_ptr<Effect> efk_SlashFinisher;      // 剣の必殺技
     Effekseer::Handle hdl_SlashFinisher = -1;
 
-    
-
-
+    std::unique_ptr<Sprite_Batch> ClearMask{ nullptr };
+    float mClearDissolvePower{ 0.0f };
     //****************************************************************
     // 
     // 残像
@@ -442,5 +440,4 @@ private:
         Rotate r{};
         std::unique_ptr<ModelComponent> Model{};
     }mAfterImage;
-
-};
+ };

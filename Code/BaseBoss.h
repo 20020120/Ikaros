@@ -25,7 +25,7 @@ protected:
     // 
     //****************************************************************
 
-    virtual void ChangeView();
+    virtual void ChangeView(float elapsedTime);
     virtual void ChangeViewPerformance(float);
     virtual void AttackManager(float elapsedTime) = 0;
     virtual void GuiMenu(){};

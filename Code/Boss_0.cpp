@@ -32,7 +32,8 @@ Boss_0::Boss_0(ID3D11Device* Device)
     mPointLight = std::make_unique<GamePointLight>(Device,4);
     mPointLight->SetColor({ 1.0f,0.0f,0.0f });
 
-
+    ZoomPower = 0.0f;
+    ZoomUp = true;
     StackZoomPower = 0.0f;
     // 登場
     EnemyManager::Instance().SetStartBossAppear(true);
@@ -318,7 +319,7 @@ void Boss_0::Behavior(float elapsedTime)
 
     // 移動
     Move(elapsedTime);
-    ChangeView();
+    ChangeView(elapsedTime);
 
     if (CompleteAttack)
     {
@@ -402,8 +403,27 @@ void Boss_0::FirstMotion(float elapsedTime)
 
     // ボスのほうにカメラを向けてボス登場モーション
     StackTimer += elapsedTime;
-
     ProjectileManager::Instance().Clear();
+
+    ZoomPower += elapsedTime;
+    if (ZoomPower >= 1.5f)
+    {
+        if (!ZoomUp)
+        {
+            ZoomPower -= elapsedTime * 100.0f;
+            ZoomPower = std::max(ZoomPower, 0.0f);
+        }
+        else
+        {
+            ZoomPower += elapsedTime * 100.0f;
+            ZoomPower = std::min(ZoomPower, 100.0f);
+            if (ZoomPower >= 100.0f)
+            {
+                ZoomUp = false;
+            }
+        }
+    }
+    EnemyManager::Instance().fSetZoomPower(ZoomPower);
 
     // それが終わったら
     if (StackTimer > Timer)
@@ -643,7 +663,7 @@ void Boss_0::Performancemanager(float elapsedTime)
 
 
 
-void Boss_0::ChangeView()
+void Boss_0::ChangeView(float elapsedTime)
 {
     // 視点変更完了後のⅠフレーム処理
     if (!CompleteChangeView && !GameSystem::Instance().GetChangingView())
@@ -682,6 +702,7 @@ void Boss_0::ChangeView()
         IsPerformance = true;
         r.Angle = { 0.0f,DirectX::XMConvertToRadians(180.0f),0.0f };
         CurrentMode = SIDE;
+        ZoomPower = 0.0f;
         
     }
 
@@ -694,6 +715,26 @@ void Boss_0::ChangeView()
             IsLastPerformance = true;
         }
     }
+
+    ZoomPower += elapsedTime;
+    if (ZoomPower >= 1.5f)
+    {
+        if (!ZoomUp)
+        {
+            ZoomPower -= elapsedTime * 100.0f;
+            ZoomPower = std::max(ZoomPower, 0.0f);
+        }
+        else
+        {
+            ZoomPower += elapsedTime * 100.0f;
+            ZoomPower = std::min(ZoomPower, 100.0f);
+            if (ZoomPower >= 100.0f)
+            {
+                ZoomUp = false;
+            }
+        }
+    }
+    EnemyManager::Instance().fSetZoomPower(ZoomPower);
 
     if(InputChangeView)
     {

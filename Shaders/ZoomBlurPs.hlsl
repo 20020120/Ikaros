@@ -38,6 +38,5 @@ float4 main(PsInput PsInput_) : SV_TARGET
     
 	outColor.rgb *= 1.0 / float(focusDetail);
 
-
 	return outColor;
 }

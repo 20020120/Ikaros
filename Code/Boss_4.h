@@ -89,7 +89,7 @@ private:
     void S_DiffuseShot2(float elapsedTime);
 protected:
     void LastMotion(float elapsedTime);
-    void ChangeView() override;
+    void ChangeView(float elapsedTime) override;
     //void ChangeViewPerformance(float) override;
     void FirstMotion(float elapsedTime) override;
 };

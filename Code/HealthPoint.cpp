@@ -172,51 +172,46 @@ void HealthPoint::SubtractHP(const int& subtract)
 
 void HealthPoint::AlertUpdate(float elapsedTime)
 {
-    const float maxAlpha = 0.8f;
-    const float minAlpha = 0.0f;
-
     const float r = static_cast<float>(*health_point) / static_cast<float>(MAXHP);
     if (r < 0.2f)
     {
-        alertTimer += elapsedTime * 2.0f;
+        const float maxAlpha = 1.0f;
+        const float minAlpha = 0.0f;
+
+        const float frac = 5.0f;
+
         switch (alertState)
         {
         case 0:
-            spr_alert.Color.w = Calcu3D::LerpFloat(minAlpha, maxAlpha, alertTimer);
-
+            alertTimer += elapsedTime * frac;
             if (alertTimer > 1.0f)
             {
-                alertTimer = 0.0f;
+                alertTimer = 1.0f;
                 alertState++;
             }
-
             break;
 
         case 1:
-            spr_alert.Color.w = Calcu3D::LerpFloat(maxAlpha, minAlpha, alertTimer);
-
-            if (alertTimer > 1.0f)
+            alertTimer -= elapsedTime * frac;
+            if (alertTimer < 0.0f)
             {
                 alertTimer = 0.0f;
                 alertState++;
             }
-
             break;
         case 2:
-            spr_alert.Color.w = Calcu3D::LerpFloat(minAlpha, maxAlpha, alertTimer);
-
+            alertTimer += elapsedTime * frac;
             if (alertTimer > 1.0f)
             {
-                alertTimer = 0.0f;
+                alertTimer = 1.0f;
                 alertState++;
             }
 
             break;
 
         case 3:
-            spr_alert.Color.w = Calcu3D::LerpFloat(maxAlpha, minAlpha, alertTimer);
-
-            if (alertTimer > 1.0f)
+            alertTimer -= elapsedTime * frac;
+            if (alertTimer < 0.0f)
             {
                 alertTimer = 0.0f;
                 alertState++;
@@ -225,20 +220,79 @@ void HealthPoint::AlertUpdate(float elapsedTime)
             break;
 
         case 4:
-            if(alertTimer > 3.0f)
+            alertTimer -= elapsedTime;
+            if(alertTimer < -0.5f)
             {
                 alertTimer = 0.0f;
                 alertState = 0;
             }
             break;
         }
+        spr_alert.Color.w = Calcu3D::LerpFloat(minAlpha, maxAlpha, alertTimer);
     }
+    else if (r < 0.4f)
+    {
+        const float maxAlpha = 1.0f;
+        const float minAlpha = 0.0f;
+
+        const float frac = 2.5f;
+        switch (alertState)
+        {
+        case 0:
+            alertTimer += elapsedTime * frac;
+            if (alertTimer > 1.0f)
+            {
+                alertTimer = 1.0f;
+                alertState++;
+            }
+            break;
+
+        case 1:
+            alertTimer -= elapsedTime * frac;
+            if (alertTimer < 0.0f)
+            {
+                alertTimer = 0.0f;
+                alertState++;
+            }
+            break;
+        case 2:
+            alertTimer += elapsedTime * frac;
+            if (alertTimer > 1.0f)
+            {
+                alertTimer = 1.0f;
+                alertState++;
+            }
+
+            break;
+
+        case 3:
+            alertTimer -= elapsedTime * frac;
+            if (alertTimer < 0.0f)
+            {
+                alertTimer = 0.0f;
+                alertState++;
+            }
+
+            break;
+
+        case 4:
+            alertTimer -= elapsedTime;
+            if (alertTimer < -1.0f)
+            {
+                alertTimer = 0.0f;
+                alertState = 0;
+            }
+            break;
+        }
+        spr_alert.Color.w = Calcu3D::LerpFloat(minAlpha, maxAlpha, alertTimer);
+    }
+
     else
     {
         alertTimer = 0.0f;
         alertState = 0;
 
-        spr_alert.Color.w = Calcu3D::LerpFloat(spr_alert.Color.w, minAlpha, 10.0f * elapsedTime);
+        spr_alert.Color.w = Calcu3D::LerpFloat(spr_alert.Color.w, 0.0f, 10.0f * elapsedTime);
 
     }
 }

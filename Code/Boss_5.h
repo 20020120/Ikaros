@@ -18,7 +18,7 @@ public:
 protected:
     void AttackManager(float elapsedTime) override;
     void GuiMenu() override;
-    void ChangeView() override;
+    void ChangeView(float elapsedTime) override;
 
     //--------------------<ビームのモデル>--------------------//
     struct BeamEmitter
@@ -49,6 +49,9 @@ protected:
         get_rib_of_loop,
         get_rib_of_end,
         defeat,
+        Aperemce,
+        Aperemce2,
+
     };
 
     //--------------------<イベントフラグ>--------------------//

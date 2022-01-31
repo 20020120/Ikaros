@@ -42,7 +42,7 @@ void Boss_6::Behavior(float elapsed_time)
     default:;
     }
 
-    ChangeView();
+    ChangeView(elapsed_time);
 
     if (IsPerformance)
     {
@@ -431,7 +431,7 @@ void Boss_6::Finalize()
     BaseBoss::Finalize();
 }
 
-void Boss_6::ChangeView()
+void Boss_6::ChangeView(float elapsedTime)
 {
     // 視点変更完了後のⅠフレーム処理
     if (!CompleteChangeView && !GameSystem::Instance().GetChangingView())
@@ -440,6 +440,7 @@ void Boss_6::ChangeView()
         CompleteChangeView = true;
         CompleteAttack = false;
         CurrentAttackNumber = 0;
+        ZoomPower = 0.0f;
     }
 
     if (CompleteAttack && CompleteChangeView)
@@ -452,12 +453,33 @@ void Boss_6::ChangeView()
             r.Angle = { 0.0f,DirectX::XMConvertToRadians(180.0f),0.0f };
             CurrentMode = SIDE;
             type = Type::BLUE;
-            Model->f_PlayAnimation(AnimationName::get_rib_of_begein);
+            Model->f_PlayAnimation(AnimationName::B);
             se[0]->Play(false);
+            ZoomPower = 0.0f;
+            ZoomUp = true;
         }
     }
 
+    ZoomPower += elapsedTime;
+    if (ZoomPower >= 1.5f)
+    {
+        if (!ZoomUp)
+        {
+            ZoomPower -= elapsedTime * 100.0f;
+            ZoomPower = std::max(ZoomPower, 0.0f);
+        }
+        else
+        {
+            ZoomPower += elapsedTime * 100.0f;
+            ZoomPower = std::min(ZoomPower, 100.0f);
+            if (ZoomPower >= 100.0f)
+            {
+                ZoomUp = false;
+            }
+        }
+    }
 
+    EnemyManager::Instance().fSetZoomPower(ZoomPower);
 
     if (IsInputChangeView)
     {
@@ -1241,6 +1263,11 @@ void Boss_6::FirstMotion(float elapsedTime)
         }
         else
         {
+            if(!IsRoar)
+            {
+                se[0]->Play(false);
+                IsRoar = true;
+            }
             ZoomPower += elapsedTime * 100.0f;
             ZoomPower = std::min(ZoomPower, 100.0f);
             if (ZoomPower >= 100.0f)
@@ -1254,7 +1281,7 @@ void Boss_6::FirstMotion(float elapsedTime)
     if (!Model->GetIsPlayAnimation())
     {
         Model->f_PlayAnimation(AnimationName::angry);
-        se[0]->Play(false);
+       
     }
 
     if (mAnimationFlag.Check("EndStart", Model->GetCurrentAnimationNumber(), Model->GetCurrentAnimationFrame()))

@@ -48,7 +48,7 @@ Enemy::Enemy(ID3D11Device* d, const char* ModelFilePath, const char* PSFilePath)
 
     efk_WeakDamaged = EffectResourceManager::Instance().LoadEffect("./resources/Effects/enemy_hit.efk");
     efk_UnDamaged = EffectResourceManager::Instance().LoadEffect("./resources/Effects/enemy_hit_block.efk");
-    efk_Bomb = EffectResourceManager::Instance().LoadEffect("./resources/Effects/bomb.efk");
+    efk_Bomb = EffectResourceManager::Instance().LoadEffect("./resources/Effects/bomb_2.efk");
     efk_MoreBomb = EffectResourceManager::Instance().LoadEffect("./resources/Effects/bomb_more.efk");
 
     se_WeakDamaged = Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Enemy/HitPlus.wav");
@@ -290,7 +290,7 @@ bool Enemy::Damage(float damage, float invTimer,bool Finisehr)
                 ProjectileManager::Instance().RegisterProjectile(energyBlue);
             }
             Destroy();
-            efk_Bomb->Play(t.Position, {}, 0.1f);
+            efk_Bomb->Play(t.Position, {}, 20.0f);
             GameSystem::Instance().KilledEnemy();
         }
         return true;

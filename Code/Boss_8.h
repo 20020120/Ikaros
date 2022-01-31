@@ -17,7 +17,7 @@ public:
     void Render(ID3D11DeviceContext* dc) override;
     void Finalize() override;
 protected:
-    void ChangeView() override;
+    void ChangeView(float elapsedTime) override;
     void AttackManager(float elapsedTime) override;
     void GuiMenu() override;
     void T_HighTempoShot(float elapsedTime);

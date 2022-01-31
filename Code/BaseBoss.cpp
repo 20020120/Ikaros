@@ -133,7 +133,7 @@ void BaseBoss::AppealTime(float elapsedTime)
             CurrentAttackNumber++;
         }
     }
-void BaseBoss::ChangeView()
+void BaseBoss::ChangeView(float elapsedTime)
 {
 
     // 視点変更完了後のⅠフレーム処理

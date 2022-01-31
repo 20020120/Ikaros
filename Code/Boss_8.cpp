@@ -43,7 +43,7 @@ void Boss_8::Behavior(float elapsed_time)
     default:;
     }
 
-    ChangeView();
+    ChangeView(elapsed_time);
 
     if (IsPerformance)
     {
@@ -502,7 +502,7 @@ void Boss_8::PlayEffects(float elapsedTime)
 
 
 
-void Boss_8::ChangeView()
+void Boss_8::ChangeView(float elapsedTime)
 {
     // 視点変更完了後のⅠフレーム処理
     if (!CompleteChangeView && !GameSystem::Instance().GetChangingView())

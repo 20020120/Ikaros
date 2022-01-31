@@ -36,7 +36,7 @@ void Boss_7::Behavior(float elapsed_time)
     default:;
     }
 
-    ChangeView();
+    ChangeView(elapsed_time);
 
     if (IsPerformance)
     {
@@ -207,7 +207,7 @@ void Boss_7::Initialize()
     BehaviorVec.emplace_back(vec);
     vec.clear();
 
-
+    IsRoar = false;
 
 
 }
@@ -232,7 +232,7 @@ void Boss_7::Finalize()
     BaseBoss::Finalize();
 }
 
-void Boss_7::ChangeView()
+void Boss_7::ChangeView(float elapsedTime)
 {
     
 }
@@ -675,12 +675,12 @@ void Boss_7::FirstMotion(float elapsedTime)
         }
         else
         {
-            if(!IsRoar)
+            if (!IsRoar)
             {
                 IsRoar = true;
                 se[0]->Play(false);
             }
-                        ZoomPower += elapsedTime * 100.0f;
+            ZoomPower += elapsedTime * 100.0f;
             ZoomPower = std::min(ZoomPower, 100.0f);
             if (ZoomPower >= 100.0f)
             {
@@ -690,12 +690,9 @@ void Boss_7::FirstMotion(float elapsedTime)
     }
     EnemyManager::Instance().fSetZoomPower(ZoomPower);
 
-
     if (!Model->GetIsPlayAnimation()&& StackTimer< 20.0f)
     {
         Model->f_PlayAnimation(AnimationName::angry);
-
-       
         DirectX::XMFLOAT3 launtchPos = t.Position;
         launtchPos.y -= 10.0f;
         hdl_Angry = efk_Angry->Play(launtchPos, {}, 0.4f);

@@ -28,7 +28,6 @@ Player::Player(ID3D11Device* d)
     Ini.SetModelPath("./resources/Models/Characters/Players/AfterIMageModel.nk");
     Ini.SetPsPath("./resources/Shaders/AfterImage_PS.cso");
     mAfterImage.Model = std::make_unique<ModelComponent>(d, Ini);
-    
 
     //--------------------<スプライトを初期化>--------------------//
     spr_HitArea = std::make_unique<Sprite_Batch>(d, L"./resources/Sprite/UIs/HitArea.png", 1);
@@ -68,6 +67,11 @@ Player::Player(ID3D11Device* d)
     sprBlackCurtain.Color = { 1.0f,1.0f,1.0f,0.0f };
     sprBlackCurtain.Scale = { 1.0f,1.0f };
 
+    ClearMask = std::make_unique<Sprite_Batch>(d,
+        L"./resources/Sprite/Shaders/AlphaMask.png", 1,
+        L"./resources/Sprite/Shaders/dissolve.png",
+        L"./resources/Sprite/Shaders/load_screen.png");
+    mClearDissolvePower = 0.0f;
     //SE
     se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Player/ModeChangeSE.wav"));
     se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Player/Hit_SameColor.wav"));
@@ -91,8 +95,6 @@ Player::Player(ID3D11Device* d)
     se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Enemy/LaserCharge.wav"));
     se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Enemy/LaserCharge.wav"));
     
-
-
 
     volumes.emplace_back(0.9f);//ModeChange
     volumes.emplace_back(0.75f);//HitSameColor
@@ -129,7 +131,6 @@ Player::Player(ID3D11Device* d)
     // じおめとりしぇーだ
     Gs_CBuffer.Init(d, &mGsData);
     Gs_CBuffer.Set_GSSlot(4);
-
 }
 
 void Player::Initialize()
@@ -224,7 +225,6 @@ void Player::Initialize()
 
     //演出設定を初期化
     IsLightPerformance = OptionSystem::Instance().GetDirectingSetting();
-
     PreferSkipPerformance = false;
     StackSkipTimer = 0.0f;
     EnemiesStop = false;
@@ -268,9 +268,6 @@ void Player::Update(float elapsedTime)
 
     //--------------------<ImGuiのデバッグウインドウ>--------------------//
     GuiMenu();
-    
-
-    
 
     //--------------------<パーティクルの更新>--------------------//
     auto frontVec = GetFrontVec();
@@ -289,7 +286,6 @@ void Player::Update(float elapsedTime)
         Model->f_PlayAnimation(AnimationName::wait, true);
         mAfterImage.Model->f_PlayAnimation(AnimationName::wait, true);
     }
-
 
     //--------------------<必殺技中は全ての更新を受け付けない>--------------------//
     if (IsFinisher)
@@ -403,14 +399,14 @@ void Player::Render(ID3D11DeviceContext* dc)
 
     if (IsInvincible)
     {
-        const int IntTime = static_cast<int>(StackInvincibleTime * 10.0f);
-        switch (IntTime % 2)
+        const int IntTime = static_cast<int>((StackInvincibleTime) * 10.0f);
+        switch (IntTime % 3)
         {
         case 0:
             Model->Render(dc, t, r);
            // AfterImageModel->Render(dc, afImage_t, afImage_r);
             break;
-        case 1:
+        default:
             break;
         }
     }
@@ -445,18 +441,15 @@ void Player::Render2D(ID3D11DeviceContext* dc,bool draw)
         constexpr XMFLOAT2 pivot = { 0.5f,0.5f };
         constexpr XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f };
     }
-
-    spr_HitArea->Begin(dc);
-    //spr_HitArea->Render(dc, pos, scale, txPos, cutSize, pivot, 0.0f, color);
-    //spr_HitArea->render(dc, 0.0f, 0.0f, 25.0, 25.0f);
-    spr_HitArea->End(dc);
-
-
+    
     spr_CutIn0.Render(dc);
     spr_CutIn1.Render(dc);
 
     sprBlackCurtain.Render(dc);
-    
+    ClearMask->SetDissolvePower(mClearDissolvePower);
+    ClearMask->Begin(dc);
+    ClearMask->Render(dc, { 0.0f,0.0f }, { 1.0f,1.0f }, { 0.0f,0.0f }, { 1280.0f,720.0f }, { 0.0f,0.0f }, 0.0f, { 1.0f,1.0f,1.0f,1.0f });
+    ClearMask->End(dc);
 }
 
 
@@ -869,8 +862,7 @@ void Player::UpdateEnergy()
         mAfterImage.Model->f_PlayAnimation(AnimationName::wing, true);
         EndTransform = true;
         CompleteElement1Tutorial = true;
-        AttentionCamera = false;
-        
+        AttentionCamera = false;\
     }
     else if(!EndTransform && Flags.Check("EndChangeToHuman", Model->GetCurrentAnimationNumber(), Model->GetCurrentAnimationFrame()))
     {
@@ -1910,7 +1902,7 @@ bool  Player::LastAttack(float elapsedTime)
         // 爆発
 
         StackPerformanceTime += elapsedTime;
-        if(StackPerformanceTime>=1.5f)
+        if(StackPerformanceTime>=1.2f)
         {
             StackPerformanceTime = 0.0f;
             PerformState++;
@@ -1919,8 +1911,8 @@ bool  Player::LastAttack(float elapsedTime)
         break;
     case 10:
          // 暗転
-        sprBlackCurtain.Color.w += elapsedTime * 5.0f;
-        if (sprBlackCurtain.Color.w >= 1.0f)
+        mClearDissolvePower += elapsedTime * 0.8f;
+        if (mClearDissolvePower >= 1.0f)
         {
             PerformState++;
         }
@@ -1987,7 +1979,7 @@ void Player::VsProjectile(float elapsedTime)
                 {
                     se.at(SE::HIT_SAME_COLOR)->Stop();
                     se.at(SE::HIT_SAME_COLOR)->Play(false, OptionSystem::Instance().GetSeVolume() * volumes.at(SE::HIT_SAME_COLOR));
-                    hdl_UnWeakDamaged = efk_UnWeakDamaged->Play(proj.GetPosition(), {}, 0.1f);
+                    hdl_UnWeakDamaged = efk_UnWeakDamaged->Play(proj.GetPosition(), {}, 0.155f);
                     efk_UnWeakDamaged->SetAngle(hdl_UnWeakDamaged, { 0.0f,DirectX::XMConvertToRadians(90.0f),0.0f });
 
                 }
@@ -2001,11 +1993,11 @@ void Player::VsProjectile(float elapsedTime)
             //違う場合
             else
             {
-                if(Damaged(damage * damageRatio))
+                if(Damaged(damage * damageRatio))                                     
                 {
                     se.at(SE::HIT_DIFFERENT_COLOR)->Stop();
                     se.at(SE::HIT_DIFFERENT_COLOR)->Play(false, OptionSystem::Instance().GetSeVolume() * volumes.at(SE::HIT_DIFFERENT_COLOR));
-                    efk_WeakDamaged->Play(proj.GetPosition(), {}, 0.03f);
+                    efk_WeakDamaged->Play(proj.GetPosition(), {}, 0.04f);
                 }
                 else
                 {

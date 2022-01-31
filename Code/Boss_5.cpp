@@ -38,7 +38,7 @@ void Boss_5::Behavior(float elapsed_time)
     default:;
     }
 
-    ChangeView();
+    ChangeView( elapsed_time);
 
     if (IsPerformance)
     {
@@ -100,7 +100,6 @@ void Boss_5::Collision()
     VsProjectile();
 }
 
-
 Boss_5::Boss_5(ID3D11Device* d)
     :BaseBoss(d, "./resources/Models/Characters/Boss/BossWhite.nk", "./resources/Shaders/Boss_PBR_PS.cso")
 {
@@ -154,7 +153,7 @@ Boss_5::~Boss_5()
 void Boss_5::Initialize()
 {
     //--------------------<Žp¨‚ð‰Šú‰»>--------------------//
-
+    IsRoar = false;
     t.Position = { 0.0f,0.0f,90.0f };
     t.Scale = { 0.04f,0.04f,0.04f };
     r.Angle = { 0.0f,DirectX::XMConvertToRadians(180.0f),0.0f };
@@ -174,7 +173,7 @@ void Boss_5::Initialize()
     CurrentAttackComboNumber = 0;
     ShotRadian = {};
     Ratio = {};
-
+    ZoomUp = true;
 
     //LightRange = { 0.0f };
     //LightColor = { 1.0f,0.0f,0.0f };
@@ -319,6 +318,7 @@ void Boss_5::AttackManager(float elapsedTime)
 
     if (CompleteAttack)
     {
+        EnemyManager::Instance().fSetZoomPower(0.0f);
         switch (CurrentMode) {
         case TOP:
             CurrentAttackComboNumber = rand() % 4;
@@ -352,7 +352,7 @@ void Boss_5::GuiMenu()
 #endif
 }
 
-void Boss_5::ChangeView()
+void Boss_5::ChangeView(float elapsedTime)
 {
     // Ž‹“_•ÏXŠ®—¹Œã‚Ì‡TƒtƒŒ[ƒ€ˆ—
     if (!CompleteChangeView && !GameSystem::Instance().GetChangingView())
@@ -361,6 +361,7 @@ void Boss_5::ChangeView()
         CompleteChangeView = true;
         CompleteAttack = false;
         CurrentAttackNumber = 0;
+        EnemyManager::Instance().fSetZoomPower(0.0f);
     }
 
     if (CompleteAttack && CompleteChangeView)
@@ -373,10 +374,36 @@ void Boss_5::ChangeView()
             r.Angle = { 0.0f,DirectX::XMConvertToRadians(180.0f),0.0f };
                 CurrentMode = SIDE;
                 type = Type::BLUE;
-                Model->f_PlayAnimation(AnimationName::get_rib_of_begein);
+                Model->f_PlayAnimation(AnimationName::Aperemce2);
+                ZoomPower = 0.0f;
+                ZoomUp = true;
                 se[0]->Play(false);
         }
     }
+
+    ZoomPower += elapsedTime;
+    if (ZoomPower >= 1.5f)
+    {
+        if (!ZoomUp)
+        {
+            ZoomPower -= elapsedTime * 100.0f;
+            ZoomPower = std::max(ZoomPower, 0.0f);
+        }
+        else
+        {
+            ZoomPower += elapsedTime * 100.0f;
+            ZoomPower = std::min(ZoomPower, 100.0f);
+            if (ZoomPower >= 100.0f)
+            {
+                ZoomUp = false;
+            }
+        }
+    }
+    else
+    {
+        //ZoomPower = 0.0f;
+    }
+    EnemyManager::Instance().fSetZoomPower(ZoomPower);
 
 
 
@@ -769,6 +796,11 @@ void Boss_5::FirstMotion(float elapsedTime)
         }
         else
         {
+            if (!IsRoar)
+            {
+                IsRoar = true;
+                se[0]->Play(false);
+            }
             ZoomPower += elapsedTime * 100.0f;
             ZoomPower = std::min(ZoomPower, 100.0f);
             if (ZoomPower >= 100.0f)
@@ -781,11 +813,12 @@ void Boss_5::FirstMotion(float elapsedTime)
 
 
 
+
     if (!Model->GetIsPlayAnimation()&& StackTimer <= 10.0f)
     {
         Model->f_PlayAnimation(AnimationName::angry);
 
-        se[0]->Play(false);
+        //se[0]->Play(false);
         DirectX::XMFLOAT3 launtchPos = t.Position;
         launtchPos.y -= 10.0f;
         hdl_Angry = efk_Angry->Play(launtchPos, {}, 0.4f);

@@ -928,6 +928,12 @@
     <FxCompile Include="Shaders\ZoomBlurPs.hlsl">
       <Filter>source\Graphic\ShaderResource</Filter>
     </FxCompile>
+    <FxCompile Include="Shaders\PBR\OutLineShaderPs.hlsl">
+      <Filter>source\Graphic\ShaderResource\PhisicsBase</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\SkinnedMesh\OutLineShaderVs.hlsl">
+      <Filter>source\Graphic\ShaderResource\SkinnedMesh</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Font.hlsli">

@@ -25,7 +25,6 @@ AudioSource::~AudioSource()
 // 再生
 void AudioSource::Play(bool loop, const float volume)
 {
-
 	// ソースボイスにデータを送信
 	XAUDIO2_BUFFER buffer = { 0 };
 	buffer.AudioBytes = resource->GetAudioBytes();

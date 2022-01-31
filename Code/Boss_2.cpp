@@ -217,7 +217,7 @@ void Boss_2::Behavior(float elapsed_time)
     }
 
 
-    ChangeView();
+    ChangeView(elapsed_time);
 
     if(IsPerformance)
     {
