@@ -24,6 +24,7 @@ public: // Setä÷êî
 
 private:
     bool CameraPosLerp(float elapsetTime);
+    bool CameraFovLerp(float elapsedTime);
 
 private:
     using pFunc = void(TitleCamera::*)(float);

@@ -12,6 +12,7 @@ void TitleCamera::Initialize(ID3D11Device* device)
     constexpr DirectX::XMFLOAT3 focus = { 0.0f,0.0f,0.0f };
     constexpr DirectX::XMFLOAT3 up = { 0.0f,1.0f,0.0f };
     camera->SetLookAtLH(left_front_pos, focus, up);
+    camera->SetFovDegree(95.0f);    // 95.0f“x -> 45.0f“x‚É
 
     timer.Initialize(nullptr, COUNT::UP, 0.0f);
 
@@ -24,6 +25,8 @@ void TitleCamera::Initialize(ID3D11Device* device)
 
 void TitleCamera::Update(float elapsedTime)
 {
+    CameraFovLerp(elapsedTime);
+
     if (CameraPosLerp(elapsedTime) == false)
     {
         timer.Update(elapsedTime);
@@ -66,6 +69,17 @@ bool TitleCamera::CameraPosLerp(float elapsedTime)
 
     return true;
 }
+
+bool TitleCamera::CameraFovLerp(float elapsedTime)
+{
+    const float fov = camera->GetFovDegree();
+    if (fov - FLT_EPSILON <= 45.0f) return true;
+
+    const float lerped_fov = Calcu3D::LerpFloat(fov, 45.0f, 8.0f * elapsedTime);
+
+    camera->SetFovDegree(lerped_fov);
+}
+
 
 
 void TitleCamera::Phase0(float elapsedTime)
