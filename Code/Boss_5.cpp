@@ -263,6 +263,7 @@ void Boss_5::Initialize()
     vec.clear();
 
     status.hitPoint = static_cast<float>(MaxHitPoint);
+    IsRoar = false;
 }
 
 void Boss_5::Render(ID3D11DeviceContext* dc)
@@ -377,7 +378,7 @@ void Boss_5::ChangeView(float elapsedTime)
                 Model->f_PlayAnimation(AnimationName::Aperemce2);
                 ZoomPower = 0.0f;
                 ZoomUp = true;
-                se[0]->Play(false);
+                IsRoar = false;
         }
     }
 
@@ -391,6 +392,11 @@ void Boss_5::ChangeView(float elapsedTime)
         }
         else
         {
+            if(!IsRoar)
+            {
+                se[0]->Play(false);
+                IsRoar = true;
+            }
             ZoomPower += elapsedTime * 100.0f;
             ZoomPower = std::min(ZoomPower, 100.0f);
             if (ZoomPower >= 100.0f)
@@ -398,10 +404,6 @@ void Boss_5::ChangeView(float elapsedTime)
                 ZoomUp = false;
             }
         }
-    }
-    else
-    {
-        //ZoomPower = 0.0f;
     }
     EnemyManager::Instance().fSetZoomPower(ZoomPower);
 
@@ -552,9 +554,9 @@ void Boss_5::S_Shot(float elapsedTime)
 
         if (Ratio >= 0.4f)
         {
-
             
-
+            se[BLUE_BULLET_SHOT]->Stop();
+            se[BLUE_BULLET_SHOT]->Play(false);
             auto b1 = new StayToTargetBullet(BaseProjectile::Parent::REDENEMY, t.Position, 1, { 0.0f,20.0f,-10.0f }, 1.6f);
             ProjectileManager::Instance().RegisterProjectile(b1);
 
@@ -564,7 +566,6 @@ void Boss_5::S_Shot(float elapsedTime)
             auto b3 = new StayToTargetBullet(BaseProjectile::Parent::REDENEMY, t.Position, 1, { 0.0f,0.0f,0.0f });
             ProjectileManager::Instance().RegisterProjectile(b3);
 
-            
 
             auto b5 = new StayToTargetBullet(BaseProjectile::Parent::REDENEMY, t.Position, 1, { 0.0f,-20.0f,-10.0f }, 1.6f);
             ProjectileManager::Instance().RegisterProjectile(b5);
@@ -782,6 +783,11 @@ void Boss_5::S_DiffuseShot(float elapsedTime)
     
 }
 
+void Boss_5::SV_StayTargetAtack(DirectX::XMFLOAT3 TargetPos){
+     auto b1 = new StayToTargetBullet(BaseProjectile::Parent::REDENEMY, t.Position, 1, TargetPos, 1.6f);
+    ProjectileManager::Instance().RegisterProjectile(b1);
+}
+
 void Boss_5::FirstMotion(float elapsedTime)
 {
     // ボスのほうにカメラを向けてボス登場モーション
@@ -827,7 +833,7 @@ void Boss_5::FirstMotion(float elapsedTime)
     if (mAnimationFlag.Check("EndStart", Model->GetCurrentAnimationNumber(), Model->GetCurrentAnimationFrame()))
     {
         StackTimer = 20.0f;
-        EnemyManager::Instance().fSetZoomPower(0.0f); ZoomPower += elapsedTime;
+        EnemyManager::Instance().fSetZoomPower(0.0f); 
     }
 
 

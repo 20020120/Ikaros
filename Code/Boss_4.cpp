@@ -4,6 +4,7 @@
 #include"ProjectileManager.h"
 #include"Bullet.h"
 #include "GameSystem.h"
+#include "OptionSystem.h"
 #include "SceneManager.h"
 
 void Boss_4::Behavior(float elapsed_time)
@@ -556,7 +557,7 @@ void Boss_4::ChangeView(float elapsedTime)
     }
 
     ZoomPower += elapsedTime;
-    if (ZoomPower >= 0.5f)
+    if (ZoomPower >= 0.2f)
     {
         if (!ZoomUp)
         {
@@ -579,7 +580,7 @@ void Boss_4::ChangeView(float elapsedTime)
             }
         }
     }
-
+    EnemyManager::Instance().fSetZoomPower(ZoomPower);
     if (IsInputChangeView)
     {
         GameSystem::Instance().ChangeView();
@@ -622,6 +623,9 @@ void Boss_4::T_CurveShot(float elapsedTime)
         if (StackAttackInterval >= 0.3f)
         {
             StackAttackInterval = 0.0f;
+            se[BLUE_BULLET_SHOT]->Stop();
+            se[BLUE_BULLET_SHOT]->Play(false, OptionSystem::Instance().GetSeVolume());
+
             auto b0 = new CurveBullet(BaseProjectile::Parent::REDENEMY, t.Position, 1, 1);
             ProjectileManager::Instance().RegisterProjectile(b0);
             auto b1 = new CurveBullet(BaseProjectile::Parent::REDENEMY, t.Position, -1, 1);
@@ -927,11 +931,11 @@ void Boss_4::S_Beam(float elapsedTime)
         mBeamEmitter[1].t.Position.y -= 20.0f;
 
         Ratio = 0.0f;
+        se[LaserCharge]->Stop();
+        se[LaserCharge]->Play(false, OptionSystem::Instance().GetSeVolume());
         AttackState++;
 
         /*FallThrough*/
-
-
     }
     case 1:
         if (laserFlag.Check("ShotBeam", mBeamEmitter[0].Model->GetCurrentAnimationNumber(), mBeamEmitter[0].Model->GetCurrentAnimationFrame()))
@@ -962,7 +966,8 @@ void Boss_4::S_Beam(float elapsedTime)
         break;
     case 2:
     {
-
+        se[LaserCharge]->Stop();
+        se[LaserShot]->Play(false, OptionSystem::Instance().GetSeVolume());
         ID3D11Device* p_device = SceneManager::Instance().GetDevice();
         DirectX::XMFLOAT3 p = mBeamEmitter[0].t.Position;
         auto b0 = new Beam(p_device, BaseProjectile::Parent::REDENEMY, p);
@@ -1147,8 +1152,6 @@ void Boss_4::S_CurveBullet2(float elapsedTime)
         break;
 
     }
-
-   
 }
 
 void Boss_4::S_DiffuseShot2(float elapsedTime)

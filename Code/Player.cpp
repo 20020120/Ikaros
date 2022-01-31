@@ -93,7 +93,7 @@ Player::Player(ID3D11Device* d)
     se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/BossBomb4.wav"));
 
     se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Enemy/LaserCharge.wav"));
-    se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Enemy/LaserCharge.wav"));
+    se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Enemy/LaserBeam.wav"));
     
 
     volumes.emplace_back(0.9f);//ModeChange
@@ -135,6 +135,7 @@ Player::Player(ID3D11Device* d)
 
 void Player::Initialize()
 {
+    mClearDissolvePower = 0.0f;
     //--------------------<初期化>--------------------//
     StackPerformanceTime = 0.0f;
     EndGame = false;
@@ -2280,6 +2281,7 @@ void Player::Finisher_Beam(float elapsedTime)
     case 7:
     {
         // ビーム打つ
+        se[BEAMCHARGE]->Stop();
         se[BEAM]->Play(false, OptionSystem::Instance().GetSeVolume());
 
         ID3D11Device* p_device = SceneManager::Instance().GetDevice();
@@ -2322,7 +2324,7 @@ void Player::Finisher_Beam(float elapsedTime)
         HitPoint += HealHpCount;
         // 回避可能回数回復
         DodgeCount = MaxDodgeCount;
-
+        se[BEAM]->Stop();
 
         //エネルギー設定
         EnergyGauge = MinEnergyCount;

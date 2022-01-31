@@ -84,7 +84,7 @@ protected:
     void T_Energy(float elapsedTime);
     void S_Energy(float elapsedTime);
     void S_DiffuseShot(float elapsedTime);
-    void S_ChaicePlayerAttack(float elapsedTime);
+    void SV_StayTargetAtack(DirectX::XMFLOAT3 TargetPos);
     void FirstMotion(float elapsedTime) override;
     void PlayEffects(float elapsedTime) override;
 };

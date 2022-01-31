@@ -34,7 +34,7 @@ BaseBoss::BaseBoss(ID3D11Device* d, const char* ModelFilePath, const char* PSFil
     IsDraw = true;
     se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Enemy/Shout.wav"));
     se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Player/Shot4.wav"));
-    se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/System/OperateSE.wav"));
+    se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/BossShot.wav"));
     se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Enemy/LaserCharge.wav"));
     se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Enemy/LaserBeam.wav"));
 }
@@ -295,6 +295,7 @@ void BaseBoss::T_ShotHoming(int FirstVec,float Ratio)
     }
     else
     {
+        se[BLUE_BULLET_SHOT]->Stop();
         se[BLUE_BULLET_SHOT]->Play(false);
         b0 = new HomingBullet(p_device, BaseProjectile::Parent::REDENEMY,
             t.Position, FirstVec, Ratio);
