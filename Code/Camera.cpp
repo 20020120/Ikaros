@@ -190,7 +190,7 @@ void Camera::TitleConstantBufferUpdate(ID3D11DeviceContext* dc)
 
 		float aspect_ratio{ viewport.Width / viewport.Height };
 
-		XMMATRIX P{ XMMatrixPerspectiveFovLH(XMConvertToRadians(45), aspect_ratio, 0.1f, 100000.0f) };
+		XMMATRIX P{ XMMatrixPerspectiveFovLH(XMConvertToRadians(camera_fov_degree /* 45.0f */), aspect_ratio, 0.1f, 100000.0f)};
 		DirectX::XMStoreFloat4x4(&Projection, P);
 		XMVECTOR e = DirectX::XMLoadFloat3(&Eye);
 		XMVECTOR f = DirectX::XMLoadFloat3(&Focus);

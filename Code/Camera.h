@@ -53,6 +53,7 @@ public:
     const auto& GetTarget() { return Target; }
     auto& GetFocus() { return Focus; }
     void ChangeView();
+    auto GetFovDegree() const { return camera_fov_degree; }
     //--------------------<セッター>--------------------//
     void SetCameraShake() { camera_shake = true; }
     void SetDemoCameraShake() { demo_camera_shake = true; origin_demo_eye = Eye; }
@@ -65,6 +66,7 @@ public:
     void SetBossPosition(DirectX::XMFLOAT3 p) { BossPosition = p; }
 
     void UpdateLastPerformance(float elapsedTime, int State);
+    void SetFovDegree(const float degree_) { camera_fov_degree = degree_; }
 private:
     //--------------------<カメラシェイク用>--------------------//
     void Shake(float elapsedTime, DirectX::XMFLOAT3& eye);
@@ -81,6 +83,8 @@ private:
     void AttentionPlayer(float elapsedTime);
 
     void AttentionBoss(float elapsedTime);
+
+
 
 //--------------------<縦シューティングと横シューティングか切り替える>--------------------//
     void ChangeCameraDir(float elasped);
@@ -173,6 +177,11 @@ private:
 
     bool attentionBoss{ false };
     DirectX::XMFLOAT3 BossPosition{};
+
+    float camera_fov_degree = 45.0f;    // Projection行列を作る際の視野角 (使っているのは TitleConstantBufferUpdate() だけ)
+    //                                  // GetterとSetterあり
+
+
     //****************************************************************
     // 
     // 定数
