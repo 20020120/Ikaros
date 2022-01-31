@@ -316,7 +316,7 @@ void Boss_8::FirstMotion(float elapsedTime)
     // ボスのほうにカメラを向けてボス登場モーション
 
     ZoomPower += elapsedTime;
-    if (ZoomPower >= 1.5f)
+    if (ZoomPower >= 0.5f)
     {
         if (!ZoomUp)
         {
@@ -511,8 +511,9 @@ void Boss_8::ChangeView(float elapsedTime)
         CompleteChangeView = true;
         CompleteAttack = false;
         CurrentAttackNumber = 0;
-
-        se[0]->Play(false);
+        ZoomPower = 0.0f;
+        EnemyManager::Instance().fSetZoomPower(ZoomPower);
+      
 
         switch (CurrentMode) {
         case TOP:
@@ -538,7 +539,9 @@ void Boss_8::ChangeView(float elapsedTime)
         {
             IsPerformance = true;
             r.Angle = { 0.0f,DirectX::XMConvertToRadians(180.0f),0.0f };
-
+            IsRoar = false;
+            ZoomUp = true;
+            ZoomPower = 0.0f;
             switch (CurrentMode) {
             case TOP:
                 CurrentMode = SIDE;
@@ -558,7 +561,31 @@ void Boss_8::ChangeView(float elapsedTime)
         }
     }
 
+    ZoomPower += elapsedTime;
+    if (ZoomPower >= 0.2f)
+    {
+        if (!ZoomUp)
+        {
+            ZoomPower -= elapsedTime * 100.0f;
+            ZoomPower = std::max(ZoomPower, 0.0f);
+        }
+        else
+        {
 
+            if (!IsRoar)
+            {
+                se[0]->Play(false);
+                IsRoar = true;
+            }
+            ZoomPower += elapsedTime * 100.0f;
+            ZoomPower = std::min(ZoomPower, 100.0f);
+            if (ZoomPower >= 100.0f)
+            {
+                ZoomUp = false;
+            }
+        }
+    }
+    EnemyManager::Instance().fSetZoomPower(ZoomPower);
 
     if (IsInputChangeView)
     {

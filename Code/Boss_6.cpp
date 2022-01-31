@@ -284,7 +284,7 @@ void Boss_6::Initialize()
     vec.emplace_back(&Boss_6::EndAttack);
     BehaviorVec[SIDE].emplace_back(vec);
     vec.clear();
-
+    IsRoar = false;
 }
 
 void Boss_6::PlayEffects(float elapsedTime)
@@ -441,6 +441,7 @@ void Boss_6::ChangeView(float elapsedTime)
         CompleteAttack = false;
         CurrentAttackNumber = 0;
         ZoomPower = 0.0f;
+        EnemyManager::Instance().fSetZoomPower(0.0f);
     }
 
     if (CompleteAttack && CompleteChangeView)
@@ -454,9 +455,9 @@ void Boss_6::ChangeView(float elapsedTime)
             CurrentMode = SIDE;
             type = Type::BLUE;
             Model->f_PlayAnimation(AnimationName::B);
-            se[0]->Play(false);
             ZoomPower = 0.0f;
             ZoomUp = true;
+            IsRoar = false;
         }
     }
 
@@ -470,6 +471,12 @@ void Boss_6::ChangeView(float elapsedTime)
         }
         else
         {
+
+            if(!IsRoar)
+            {
+                se[0]->Play(false);
+                IsRoar = true;
+            }
             ZoomPower += elapsedTime * 100.0f;
             ZoomPower = std::min(ZoomPower, 100.0f);
             if (ZoomPower >= 100.0f)
@@ -478,7 +485,6 @@ void Boss_6::ChangeView(float elapsedTime)
             }
         }
     }
-
     EnemyManager::Instance().fSetZoomPower(ZoomPower);
 
     if (IsInputChangeView)
@@ -538,6 +544,7 @@ void Boss_6::T_Beam(float elapsedTime)
         ShowBeamEmitter = true;
         mBeamEmitter[0].Model->f_PlayAnimation(0);
         Model->f_PlayAnimation(AnimationName::beam_begin);
+       
         AttackState++;
         CompleteAttack = false;
         /*FallThrough*/
@@ -549,6 +556,8 @@ void Boss_6::T_Beam(float elapsedTime)
         if(mAnimationFlag.Check("Laser",Model->GetCurrentAnimationNumber(),Model->GetCurrentAnimationFrame()))
         {
             Model->f_PlayAnimation(AnimationName::beam_loop, true);
+            se[LaserCharge]->Stop();
+            se[LaserCharge]->Play(false);
         }
 
 
@@ -565,6 +574,9 @@ void Boss_6::T_Beam(float elapsedTime)
         auto b0 = new Beam(p_device, BaseProjectile::Parent::REDENEMY,
             t.Position);
         ProjectileManager::Instance().RegisterProjectile(b0);
+        se[LaserCharge]->Stop();
+        se[LaserShot]->Stop();
+        se[LaserShot]->Play(false);
         AttackState++;
     }
     case 3:
@@ -587,6 +599,7 @@ void Boss_6::T_Beam(float elapsedTime)
         AttackState = 0;
         StackAttackInterval = 0.0f;
         ShowBeamEmitter = false;
+        se[LaserShot]->Stop();
         break;
 
     }
