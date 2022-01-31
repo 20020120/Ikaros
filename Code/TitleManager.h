@@ -71,6 +71,7 @@ private:
     // スプライト
     std::unique_ptr<Sprite_Batch> SprTitle;
     std::unique_ptr<Font> font;
+    std::unique_ptr<Sprite_Batch> SprSelect[4];
 
     // モデル関係
     std::unique_ptr<DirectionLight> directionLight{ nullptr };

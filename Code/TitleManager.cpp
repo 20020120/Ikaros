@@ -16,8 +16,12 @@ void TitleManager::Initialize(ID3D11Device* device)
 {
     // スプライト
     //SprTitle = new Sprite_Batch(device, L"./resources/Speite/Title/NoTitle.png", 1);
-    SprTitle = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Title/title_logo.png", 1);
-    font = std::make_unique<Font>(device, "./resources/Sprite/Font/Font.fnt", 2048);
+    SprTitle        = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Title/title_logo.png", 1);
+    font            = std::make_unique<Font>(device, "./resources/Sprite/Font/Font.fnt", 2048);
+    SprSelect[0]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Title/title_logo.png", 1);
+    SprSelect[1]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Title/title_logo.png", 1);
+    SprSelect[2]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Title/title_logo.png", 1);
+    SprSelect[3]    = std::make_unique<Sprite_Batch>(device, L"./resources/Sprite/Title/title_logo.png", 1);
 
     // プレイヤーモデル
     ModelRenderInitializer Ini;
@@ -262,10 +266,10 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
     // 選択肢
     constexpr wchar_t* button[] =
     {
-        L"スタート",
-        L"オプション",
-        L"ランキング",
-        L"おわり",
+        L"スタート",        // [0]
+        L"オプション",      // [1]
+        L"ランキング",      // [2]
+        L"おわり",          // [3]
 
         L"チュートリアル",
         L"ステージ選択",
@@ -293,8 +297,19 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
     {
         alpha[input->GetStateIndex()] = 1.0f;
 
+        //const float tex_size_x  = SprSelect[0]->GetTextureWidth();
+        //const float tex_size_y  = SprSelect[0]->GetTextureHeight();
         for(int i = 0; i < 4;++i)
         {
+            //SprSelect[i]->Begin(dc);
+            //SprSelect[i]->render(dc,
+            //    pos.x, pos.y + i * height,
+            //    1.0f,1.0f ,
+            //    tex_size_x, tex_size_y,
+            //    1.0f,1.0f,1.0f,alpha[i],
+            //    0.0f);
+            //SprSelect[i]->End(dc);
+
             text_length = wcslen(button[i]);
             font->Draw({ pos.x, pos.y + i * height },
                 { 1.0f,1.0f },
