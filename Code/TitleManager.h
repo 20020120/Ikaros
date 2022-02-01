@@ -72,6 +72,7 @@ private:
     std::unique_ptr<Sprite_Batch> SprTitle;
     std::unique_ptr<Font> font;
     std::unique_ptr<Sprite_Batch> SprSelect[13];
+    float sprite_anime_y = 0.0f;
 
     // モデル関係
     std::unique_ptr<DirectionLight> directionLight{ nullptr };
@@ -86,6 +87,9 @@ private:
 
     // スキップ用のタイマー
     Timer skip_timer;
+
+    // スプライトアニメーション用のタイマー
+    Timer animation_timer;
 
     // 補間用のタイマー
     float lerp_timer = 0.0f;

@@ -70,6 +70,9 @@ void TitleManager::Initialize(ID3D11Device* device)
     // スキップタイマー ( 2秒　)
     skip_timer.Initialize(nullptr, COUNT::DOWN, 0.1f);
 
+    // アニメーション用のタイマー
+    animation_timer.Initialize(nullptr, COUNT::UP, 0.0f);
+
     // 補間用のタイマー ( 0.5秒 )
     lerp_timer = lerp_timer_max;
 
@@ -141,6 +144,7 @@ void TitleManager::Update(float elapsedTime)
     // 終わり
     //
 
+    animation_timer.Update(elapsedTime);
 
     Input(elapsedTime);
 
@@ -269,8 +273,8 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
 
 
     // タイトル名
-    constexpr wchar_t* title_text = L"タイトル名";
-    size_t text_length = wcslen(title_text);
+    //constexpr wchar_t* title_text = L"タイトル名";
+    //size_t text_length = wcslen(title_text);
    // font->Draw(400, 400, title_text, text_length);
 
 
@@ -320,7 +324,7 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
             SprSelect[i]->Render(dc,
                 pos.x, pos.y + i * height,
                 scale.x, scale.y,
-                0.0f,0.0f,
+                0.0f,0.0f + sprite_anime_y * ((alpha[i] > 0.5f) ? 1.0f : 0.0f),
                 tex_size_x, tex_size_y,
                 0.0f,0.0f,
                 0.0f,
@@ -434,7 +438,7 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
                 SprSelect[j]->Render(dc,
                     pos.x + -target_translate.x * inverse_ratio, pos.y + i * height + -target_translate.y * inverse_ratio,
                     scale.x, scale.y,
-                    0.0f, 0.0f,
+                    0.0f, 0.0f + sprite_anime_y * ((alpha[j] > 0.5f) ? 1.0f : 0.0f),
                     tex_size_x, tex_size_y,
                     0.0f, 0.0f,
                     0.0f,
@@ -458,7 +462,7 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
             SprSelect[k]->Render(dc,
                 pos.x + target_translate.x * ratio + 75.0f, pos.y + i * height + target_translate.y * ratio + pudding,
                 scale.x, scale.y,
-                0.0f, 0.0f,
+                0.0f, 0.0f + sprite_anime_y * ((alpha[k] > 0.5f) ? 1.0f : 0.0f),
                 tex_size_x, tex_size_y,
                 0.0f, 0.0f,
                 0.0f,
@@ -470,7 +474,19 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
 
     //font->End(dc);
 
-    
+
+    // アニメーション更新
+    if (animation_timer.NowTime() > 0.15f)
+    {
+        animation_timer.Reset();
+
+        sprite_anime_y += tex_size_y;
+
+        if (sprite_anime_y + FLT_EPSILON * 6.0f >= SprSelect[0]->GetTextureHeight())
+        {
+            sprite_anime_y = 0.0f;
+        }
+    }
 }
 
 
