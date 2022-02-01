@@ -37,6 +37,7 @@ BaseBoss::BaseBoss(ID3D11Device* d, const char* ModelFilePath, const char* PSFil
     se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/BossShot.wav"));
     se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Enemy/LaserCharge.wav"));
     se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Enemy/LaserBeam.wav"));
+    se.emplace_back(Audio::Instance().LoadAudioSource("./resources/Sounds/SE/Enemy/Shout2.wav"));
 }
 
 BaseBoss::~BaseBoss()

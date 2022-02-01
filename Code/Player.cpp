@@ -2205,6 +2205,7 @@ void Player::Finisher_Beam(float elapsedTime)
     case 0:
         // カメラを注目させる
         AttentionCamera = true;
+        
         // 演出中の枠を表示する
         ProjectileManager::Instance().Clear();
         // 角度を変える
@@ -2243,7 +2244,7 @@ void Player::Finisher_Beam(float elapsedTime)
         // カメラを注目させる
         AttentionCamera = true;
         // 演出中の枠を表示する
-
+       
         // 角度を変える
         r.Angle.y = DirectX::XMConvertToRadians(60.0f);
         r.Angle.x = 0.0f;
@@ -2268,6 +2269,7 @@ void Player::Finisher_Beam(float elapsedTime)
         Model->f_PlayAnimation(AnimationName::FinisherBeamLoop, true);
         se[BEAMCHARGE]->Play(false, OptionSystem::Instance().GetSeVolume());
         hdl_Charge = efk_Charge->Play(t.Position, {}, 0.2f);
+        IsBeamFinisher = true;
         FinisherState++;
         /*Fallthrough*/
 
@@ -2285,7 +2287,7 @@ void Player::Finisher_Beam(float elapsedTime)
         // ビーム打つ
         se[BEAMCHARGE]->Stop();
         se[BEAM]->Play(false, OptionSystem::Instance().GetSeVolume());
-        GamePad::Instance().SetVibration(1.0f,1.0f,3.0f);
+        GamePad::Instance().SetVibration(0.5f,0.5f,3.0f);
         ID3D11Device* p_device = SceneManager::Instance().GetDevice();
 
         Light->SetRange(-4.0f);
@@ -2297,7 +2299,7 @@ void Player::Finisher_Beam(float elapsedTime)
         // カメラを初期化
         AttentionCamera = false;
 
-        // 角度を初期化
+        // 角度を初期
         r.Angle.y = 0.0f;
         FinisherState++;
     }
@@ -2338,7 +2340,7 @@ void Player::Finisher_Beam(float elapsedTime)
         // 回避可能回数回復
         DodgeCount = MaxDodgeCount;
         se[BEAM]->Stop();
-
+        IsBeamFinisher = false;
         //エネルギー設定
         EnergyGauge = MinEnergyCount;
 

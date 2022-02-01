@@ -569,7 +569,7 @@ void Boss_4::ChangeView(float elapsedTime)
         {
             if(!IsRoar)
             {
-                se[0]->Play(false);
+                se[Shout2]->Play(false);
                 IsRoar = true;
             }
             
@@ -1257,7 +1257,7 @@ void Boss_4::FirstMotion(float elapsedTime)
         {
             if(!IsRoar)
             {
-                se[0]->Play(false);
+                se[Shout2]->Play(false);
                 IsRoar = true;
             }
             
