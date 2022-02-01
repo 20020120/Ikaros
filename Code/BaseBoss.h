@@ -133,6 +133,9 @@ protected:
         Shout2,
     };
     //SE
-    
+    const float  ShotVolume = 0.5f;
+    const float  ShotVolume2 = 1.0f;
+    const float LaserVolume = 1.0f;
+    const float LaserChargeVolume = 1.0f;
 
 };

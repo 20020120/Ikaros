@@ -1,10 +1,11 @@
 #include "SceneManager.h"
 #include"SceneTitle.h"
 #include"SceneGame.h"
+#include"SceneCredit.h"
 #include"SceneLoading.h"
 SceneManager::SceneManager()
 {
-	CurrentScene = new SceneLoading(new SceneTitle());
+	CurrentScene = new SceneCredit();
 }
 
 

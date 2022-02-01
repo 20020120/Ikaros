@@ -249,7 +249,7 @@ bool Enemy::Damage(float damage, float invTimer,bool Finisehr)
 
     if(Finisehr)
     {
-        efk_MoreBomb->Play(t.Position, {}, 0.25f);
+        efk_MoreBomb->Play(t.Position, {}, 0.28f);
     }
 
     if (this->invTimer <= 0.0f)

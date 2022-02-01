@@ -104,7 +104,7 @@ void BaseBoss::ShotEnergyShotRadian(BaseProjectile::Parent p, DirectX::XMFLOAT3 
     ID3D11Device* p_device = SceneManager::Instance().GetDevice();
 
     se[RED_BULLET_SHOT]->Stop();
-    se[RED_BULLET_SHOT]->Play(false, OptionSystem::Instance().GetSeVolume() * 0.4f);
+    se[RED_BULLET_SHOT]->Play(false, OptionSystem::Instance().GetSeVolume() * ShotVolume2);
 
     // 前・左右斜めに発射
     auto b0 = new Energy(p_device, p,
@@ -228,7 +228,8 @@ void BaseBoss::Shot_ShotRadian(const BaseProjectile::Parent p, const XMFLOAT3 Ra
     // 前・左右斜めに発射
 
     se[BLUE_BULLET_SHOT]->Stop();
-    se[BLUE_BULLET_SHOT]->Play(false);
+    se[BLUE_BULLET_SHOT]->Play(false,
+        OptionSystem::Instance().GetSeVolume() * ShotVolume);
 
     auto b0 = new Bullet(p_device, p,
         pos, front * BulletSpeed);
@@ -245,7 +246,8 @@ void BaseBoss::Shot_ShotRadianSlow(const BaseProjectile::Parent p, const XMFLOAT
     // 前・左右斜めに発射
 
     se[BLUE_BULLET_SHOT]->Stop();
-    se[BLUE_BULLET_SHOT]->Play(false);
+    se[BLUE_BULLET_SHOT]->Play(false,
+        OptionSystem::Instance().GetSeVolume() * ShotVolume);
     auto b0 = new Bullet(p_device, p,
         pos, front, BulletSpeed);
     ProjectileManager::Instance().RegisterProjectile(b0);
@@ -260,7 +262,8 @@ void BaseBoss::Shot_ShotRadianFast(const BaseProjectile::Parent p, const XMFLOAT
     ID3D11Device* p_device = SceneManager::Instance().GetDevice();
     // 前・左右斜めに発射
     se[BLUE_BULLET_SHOT]->Stop();
-    se[BLUE_BULLET_SHOT]->Play(false);
+    se[BLUE_BULLET_SHOT]->Play(false,
+        OptionSystem::Instance().GetSeVolume() * ShotVolume);
     auto b0 = new Bullet(p_device, p,
         pos, front, BulletSpeed);
     ProjectileManager::Instance().RegisterProjectile(b0);
@@ -289,14 +292,16 @@ void BaseBoss::T_ShotHoming(int FirstVec,float Ratio)
     {
 
         se[BLUE_BULLET_SHOT]->Stop();
-        se[BLUE_BULLET_SHOT]->Play(false);
+        se[BLUE_BULLET_SHOT]->Play(false,
+            OptionSystem::Instance().GetSeVolume() * ShotVolume);
         b0 = new HomingBullet(p_device, BaseProjectile::Parent::BLUEENEMY,
             t.Position, FirstVec, Ratio);
     }
     else
     {
         se[BLUE_BULLET_SHOT]->Stop();
-        se[BLUE_BULLET_SHOT]->Play(false);
+        se[BLUE_BULLET_SHOT]->Play(false,
+            OptionSystem::Instance().GetSeVolume() * ShotVolume);
         b0 = new HomingBullet(p_device, BaseProjectile::Parent::REDENEMY,
             t.Position, FirstVec, Ratio);
     }
@@ -315,14 +320,15 @@ void BaseBoss::T_ShotHoming2(int FirstVec)
     if (GameSystem::Instance().GetCameraDirection() == GameSystem::CAMERA_DIRECTION::TOP)
     {
         se[RED_BULLET_SHOT]->Stop();
-        se[RED_BULLET_SHOT]->Play(false);
+        se[RED_BULLET_SHOT]->Play(false, OptionSystem::Instance().GetSeVolume()* ShotVolume2);
         b0 = new HomingBullet(p_device, BaseProjectile::Parent::BLUEENEMY,
             t.Position, FirstVec, 7.0f);
     }
     else
     {
         se[BLUE_BULLET_SHOT]->Stop();
-        se[BLUE_BULLET_SHOT]->Play(false);
+        se[BLUE_BULLET_SHOT]->Play(false,
+            OptionSystem::Instance().GetSeVolume() * ShotVolume);
         b0 = new HomingBullet(p_device, BaseProjectile::Parent::REDENEMY,
             t.Position, FirstVec, 7.0f);
     }
@@ -340,7 +346,8 @@ void BaseBoss::Shot_ShotVector(const BaseProjectile::Parent p, const XMFLOAT3 Ve
     ID3D11Device* p_device = SceneManager::Instance().GetDevice();
     // 前・左右斜めに発射
     se[BLUE_BULLET_SHOT]->Stop();
-    se[BLUE_BULLET_SHOT]->Play(false);
+    se[BLUE_BULLET_SHOT]->Play(false,
+        OptionSystem::Instance().GetSeVolume() * ShotVolume);
     auto b0 = new Bullet(p_device, p,
         pos, Vec * BulletSpeed);
     ProjectileManager::Instance().RegisterProjectile(b0);
@@ -353,7 +360,8 @@ void BaseBoss::Shot_ShotVectorFast(const BaseProjectile::Parent p, const DirectX
     ID3D11Device* p_device = SceneManager::Instance().GetDevice();
     // 前・左右斜めに発射
     se[BLUE_BULLET_SHOT]->Stop();
-    se[BLUE_BULLET_SHOT]->Play(false);
+    se[BLUE_BULLET_SHOT]->Play(false,
+        OptionSystem::Instance().GetSeVolume() * ShotVolume);
     auto b0 = new Bullet(p_device, p,
         pos, Vec * BulletSpeed, 40.0f);
     ProjectileManager::Instance().RegisterProjectile(b0);
@@ -365,7 +373,8 @@ void BaseBoss::Shot_ShotVectorSlow(const BaseProjectile::Parent p, const DirectX
     ID3D11Device* p_device = SceneManager::Instance().GetDevice();
     // 前・左右斜めに発射
     se[BLUE_BULLET_SHOT]->Stop();
-    se[BLUE_BULLET_SHOT]->Play(false);
+    se[BLUE_BULLET_SHOT]->Play(false,
+        OptionSystem::Instance().GetSeVolume() * ShotVolume);
     auto b0 = new Bullet(p_device, p,
         pos, Vec * BulletSpeed, 20.0f);
     ProjectileManager::Instance().RegisterProjectile(b0);

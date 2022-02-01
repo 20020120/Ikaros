@@ -97,13 +97,13 @@ Player::Player(ID3D11Device* d)
     
 
     volumes.emplace_back(0.9f);//ModeChange
-    volumes.emplace_back(0.75f);//HitSameColor
-    volumes.emplace_back(0.75f);//HitDifferentColor
+    volumes.emplace_back(0.9f);//HitSameColor
+    volumes.emplace_back(0.9f);//HitDifferentColor
     volumes.emplace_back(0.5f);//HitInvincible
     volumes.emplace_back(0.5f);//CloseAttack
     volumes.emplace_back(1.0f);//GetEnergy
-    volumes.emplace_back(0.4f);//RedBulletShot
-    volumes.emplace_back(0.2f);//BlueBulletShot
+    volumes.emplace_back(0.5f);//RedBulletShot
+    volumes.emplace_back(0.3f);//BlueBulletShot
     volumes.emplace_back(0.75f);//Dodge
     volumes.emplace_back(0.75f);//CriticalDodge
     volumes.emplace_back(1.0f);//Heal
@@ -398,7 +398,7 @@ void Player::Render(ID3D11DeviceContext* dc)
     //particleEmitter.Render(dc);
     // 無敵時間の表現
 
-    if (IsInvincible)
+    if (!IsFinisher&&IsInvincible)
     {
         const int IntTime = static_cast<int>((StackInvincibleTime) * 10.0f);
         switch (IntTime % 3)
@@ -675,7 +675,8 @@ void Player::inputDodge(float elapsedTime)
     if (CanDodge && !ReadyDodge&& !IsSlash)
     {
         //  回避する
-        if(GamePad::Instance().GetButtonDown() &GamePad::BTN_Y)
+        if(GamePad::Instance().GetButtonDown() &
+            (GamePad::BTN_RIGHT_SHOULDER| GamePad::BTN_RIGHT_TRIGGER))
         {
             DodgeVecX = GetMoveVec().x;
             DodgeVecY = GetMoveVec().y;
@@ -820,7 +821,7 @@ void Player::UpdateEnergy()
     if (EnergyGauge > MaxEnergyCount)EnergyGauge = MaxEnergyCount;
     else if (EnergyGauge < MinEnergyCount)EnergyGauge = MinEnergyCount;
 
-    const GamePadButton transformationButton = GamePad::BTN_RIGHT_TRIGGER | GamePad::BTN_RIGHT_SHOULDER;
+    const GamePadButton transformationButton = GamePad::BTN_LEFT_SHOULDER | GamePad::BTN_LEFT_TRIGGER;
 
     if (GamePad::Instance().GetButtonDown() & transformationButton&&EnemyManager::Instance().IsPlayerTransformable())
     {
@@ -906,7 +907,7 @@ void Player::InputShooting(float elapsedTime)
     if(CanShoot&&!IsFinisher&&!IsSlash)
     {
         //  射撃する
-        if (GamePad::Instance().GetButton() & GamePad::BTN_B)
+        if (GamePad::Instance().GetButton() & GamePad::BTN_X)
         {
             // デバイスを取得
             const auto& device = SceneManager::Instance().GetDevice();

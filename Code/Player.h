@@ -224,7 +224,7 @@ private:
     //--------------------<変形>--------------------//
 
     bool EndTransform{};
-    static constexpr int HealHpCount = { 2 };
+    static constexpr int HealHpCount = { 4 };
 
     //--------------------<体力>--------------------//
     static constexpr int MaxHitPoint{ 15 }; // 体力の最大値
@@ -291,10 +291,10 @@ private:
     bool IsFinisher{};  // 必殺技してるかどうか
     int FinisherState{}; // 必殺技の遷移管理
     float FinisherRatio{}; // 必殺技の関数内で使われる線形補完の割合（初期化注意）
-    float FinisherDamage = { 2.0f };
+    float FinisherDamage = { 4.0f };
     bool EnemiesStop{}; // 敵の動きを止める
 
-
+    
     //--------------------<ヒットストップ>--------------------//
     float StackHitStopSeconds{}; // ヒットストップの経過時間
     const float HitStopSecond{ 0.2f };

@@ -5,6 +5,7 @@
 #include "User_Function.h"
 #include"EnemyManager.h"
 #include "GameSystem.h"
+#include "OptionSystem.h"
 #include"ProjectileManager.h"
 #include "SceneManager.h"
 
@@ -132,6 +133,7 @@ void Boss_8::LastMotion(float elapsedTime)
     {
         t.Position = { 0.0f,0.0f,50.0f };
         IsDraw = false;
+        mPointLight->SetRange(0.0f);
     }
     else if (State == 6)
     {
@@ -715,6 +717,9 @@ void Boss_8::T_TargetShot(float elapsedTime)
         Ratio += elapsedTime;
         if (StackAttackInterval >= 0.4f)
         {
+            se[BLUE_BULLET_SHOT]->Stop();
+            se[BLUE_BULLET_SHOT]->Play(false,
+                OptionSystem::Instance().GetSeVolume() * ShotVolume);
             auto b0 = new StayToTargetBullet(BaseProjectile::Parent::REDENEMY, t.Position, 1, { static_cast<float>(rand() % 40) - 20.0f,0.0f,10.0f }, 1.3f);
             ProjectileManager::Instance().RegisterProjectile(b0);
             StackAttackInterval = 0.0f;
@@ -826,6 +831,9 @@ void Boss_8::T_StepAllRangeAttack(float elapsedTime)
     case 1:
         // 打つ
     {
+        se[BLUE_BULLET_SHOT]->Stop();
+        se[BLUE_BULLET_SHOT]->Play(false,
+            OptionSystem::Instance().GetSeVolume() * ShotVolume);
         ID3D11Device* p_device = SceneManager::Instance().GetDevice();
         const int Max = 10;
         // 全体に攻撃
@@ -860,6 +868,9 @@ void Boss_8::T_StepAllRangeAttack(float elapsedTime)
         // 撃つ
           // 打つ
     {
+        se[BLUE_BULLET_SHOT]->Stop();
+        se[BLUE_BULLET_SHOT]->Play(false,
+            OptionSystem::Instance().GetSeVolume() * ShotVolume);
         ID3D11Device* p_device = SceneManager::Instance().GetDevice();
         const int Max = 10;
         // 全体に攻撃
@@ -894,6 +905,9 @@ void Boss_8::T_StepAllRangeAttack(float elapsedTime)
     case 5:
         // 打つ
     {
+        se[BLUE_BULLET_SHOT]->Stop();
+        se[BLUE_BULLET_SHOT]->Play(false,
+            OptionSystem::Instance().GetSeVolume() * ShotVolume);
         ID3D11Device* p_device = SceneManager::Instance().GetDevice();
         const int Max = 10;
         // 全体に攻撃
@@ -943,6 +957,8 @@ void Boss_8::T_Beam(float elapsedTime)
        // アニメーション再生
         Model->f_PlayAnimation(AnimationName::beam_charge);
         AttackState++;
+        se[LaserCharge]->Stop();
+        se[LaserCharge]->Play(false, OptionSystem::Instance().GetSeVolume()*LaserChargeVolume);
         CompleteAttack = false;
         /*FallThrough*/
 
@@ -959,7 +975,9 @@ void Boss_8::T_Beam(float elapsedTime)
         Model->f_PlayAnimation(AnimationName::beam_shoot);
         AttackState++;
     case 3:
-    {
+        {
+        se[LaserCharge]->Stop();
+        se[LaserShot]->Play(false, OptionSystem::Instance().GetSeVolume() * LaserVolume);
         StackAttackInterval = 0.0f;
         ID3D11Device* p_device = SceneManager::Instance().GetDevice();
         mPointLight->SetRange(-4.0f);
@@ -979,6 +997,7 @@ void Boss_8::T_Beam(float elapsedTime)
         }
         break;
     case 5:
+        se[LaserShot]->Stop();
         CurrentAttackNumber++;
         AttackState = 0;
         StackAttackInterval = 0.0f;
@@ -1111,7 +1130,9 @@ void Boss_8::S_TargetShot(float elapsedTime)
 
     if (Ratio >= 0.5f)
     {
-
+        se[BLUE_BULLET_SHOT]->Stop();
+        se[BLUE_BULLET_SHOT]->Play(false,
+            OptionSystem::Instance().GetSeVolume() * ShotVolume);
 
         auto b0 = new StayToTargetBullet(BaseProjectile::Parent::REDENEMY, t.Position, 1,
             { 0.0f,static_cast<float>(rand() % 60)-30.0f,10.0f }, 1.3f);
@@ -1198,7 +1219,8 @@ void Boss_8::S_Beam(float elapsedTime)
         Model->f_PlayAnimation(AnimationName::beam_charge);
         Ratio = 0.0f;
         AttackState++;
-
+        se[LaserCharge]->Stop();
+        se[LaserCharge]->Play(false, OptionSystem::Instance().GetSeVolume()*LaserChargeVolume);
         /*FallThrough*/
 
 
@@ -1234,7 +1256,8 @@ void Boss_8::S_Beam(float elapsedTime)
         break;
     case 2:
     {
-
+        se[LaserCharge]->Stop();
+        se[LaserShot]->Play(false, OptionSystem::Instance().GetSeVolume() * LaserVolume);
         Model->f_PlayAnimation(AnimationName::beam_shoot);
         StackAttackInterval = 0.0f;
         ID3D11Device* p_device = SceneManager::Instance().GetDevice();
@@ -1273,6 +1296,7 @@ void Boss_8::S_Beam(float elapsedTime)
         }
         break;
     case 4:
+        se[LaserShot]->Stop();
         CurrentAttackNumber++;
         AttackState = 0;
         StackAttackInterval = 0.0f;
