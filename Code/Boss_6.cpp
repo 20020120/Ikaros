@@ -465,6 +465,7 @@ void Boss_6::ChangeView(float elapsedTime)
         }
     }
 
+
     ZoomPower += elapsedTime;
     if (ZoomPower >= 1.5f)
     {
@@ -489,7 +490,14 @@ void Boss_6::ChangeView(float elapsedTime)
             }
         }
     }
-    EnemyManager::Instance().fSetZoomPower(ZoomPower);
+    if (IsPerformance)
+    {
+        EnemyManager::Instance().fSetZoomPower(ZoomPower);
+    }
+    else
+    {
+        EnemyManager::Instance().fSetZoomPower(0.0f);
+    }
 
     if (IsInputChangeView)
     {

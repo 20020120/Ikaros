@@ -224,8 +224,14 @@ void Boss_5::Initialize()
 
     //--------------------<Side‚ÌUŒ‚>--------------------//
 
+
+    vec.emplace_back(&Boss_5::S_DiffuseShot);
+    vec.emplace_back(&Boss_5::S_Energy);
+    vec.emplace_back(&Boss_5::AppealTime2);
     vec.emplace_back(&Boss_5::S_MoveFirstPosition);
     vec.emplace_back(&Boss_5::S_Shot);
+    vec.emplace_back(&Boss_5::T_V_Homing);
+    vec.emplace_back(&Boss_5::AppealTime2);
     vec.emplace_back(&Boss_5::EndAttack);
     BehaviorVec[SIDE].emplace_back(vec);
     vec.clear();
@@ -252,7 +258,6 @@ void Boss_5::Initialize()
     vec.emplace_back(&Boss_5::AppealTime2);
     vec.emplace_back(&Boss_5::T_V_Homing);
     vec.emplace_back(&Boss_5::S_Energy);
-    vec.emplace_back(&Boss_5::S_Shot);
     vec.emplace_back(&Boss_5::EndAttack);
     BehaviorVec[SIDE].emplace_back(vec);
     vec.clear();
@@ -363,6 +368,7 @@ void Boss_5::ChangeView(float elapsedTime)
         CompleteChangeView = true;
         CompleteAttack = false;
         CurrentAttackNumber = 0;
+        ZoomPower = 0.0f;
         EnemyManager::Instance().fSetZoomPower(0.0f);
     }
 
@@ -406,7 +412,14 @@ void Boss_5::ChangeView(float elapsedTime)
             }
         }
     }
-    EnemyManager::Instance().fSetZoomPower(ZoomPower);
+    if (IsPerformance)
+    {
+        EnemyManager::Instance().fSetZoomPower(ZoomPower);
+    }
+    else
+    {
+        EnemyManager::Instance().fSetZoomPower(0.0f);
+    }
 
 
 
