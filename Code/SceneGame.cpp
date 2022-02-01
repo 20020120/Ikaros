@@ -105,7 +105,6 @@ void SceneGame::Update(float elapsedTime)
         }
 
 
-
         ProjectileManager::Instance().Clear();
         // ƒJƒƒ‰‚Ì’Ž‹“_‚ðÝ’è
         camera->UpdateLastPerformance(elapsedTime, player->GetPerformanceState());

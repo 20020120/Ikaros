@@ -63,6 +63,8 @@ void GameSystem::Initialize(ID3D11Device* Device, GameSystemData* Data)
     // ògèâä˙âª
     spr_PerformanceFrame.Initialize(Device, L"./resources/Sprite/UIs/PerformanceFrame.png");
     spr_PerformanceFrame.TexSize={ 1280.0f,720.0f };
+    spr_PerformanceFrame.Position = { 640.0f,360.0f };
+    spr_PerformanceFrame.Pivot = { 640.0f,360.0f };
 
     // ÉJÉÅÉâï˚å¸ÇÃèâä˙âªÅ@(â°)
     cameraDir = CAMERA_DIRECTION::SIDE;
@@ -143,11 +145,14 @@ void GameSystem::Update(float ElapsedTime)
 
     if(FrameDraw)
     {
-        spr_PerformanceFrame.Scale.y = Calcu3D::LerpFloat(spr_PerformanceFrame.Scale.y, 1.0f, 10.0f * ElapsedTime);
+       /* spr_PerformanceFrame.Scale.y = Calcu3D::LerpFloat(spr_PerformanceFrame.Scale.y, 1.0f, 100.0f * ElapsedTime);*/
+
+        spr_PerformanceFrame.Scale = { 1.0f,1.0f };
     }
     else
     {
-        spr_PerformanceFrame.Scale.y = Calcu3D::LerpFloat(spr_PerformanceFrame.Scale.y, 1.5f, 10.0f * ElapsedTime);
+       /* spr_PerformanceFrame.Scale.y = Calcu3D::LerpFloat(spr_PerformanceFrame.Scale.y, 1.5f, 100.0f * ElapsedTime);*/
+        spr_PerformanceFrame.Scale = { 10.0f,10.0f };
     }
 }
 

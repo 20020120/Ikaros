@@ -858,13 +858,14 @@ void Player::UpdateEnergy()
 
     }
 
-    if(!EndTransform&&Flags.Check("EndChangeToWing",Model->GetCurrentAnimationNumber(),Model->GetCurrentAnimationFrame()))
+    if(!EndTransform&&Flags.Check("EndChangeToWing",
+        Model->GetCurrentAnimationNumber(),Model->GetCurrentAnimationFrame()))
     {
         Model->f_PlayAnimation(AnimationName::wing, true);
         mAfterImage.Model->f_PlayAnimation(AnimationName::wing, true);
         EndTransform = true;
         CompleteElement1Tutorial = true;
-        AttentionCamera = false;\
+        AttentionCamera = false;
     }
     else if(!EndTransform && Flags.Check("EndChangeToHuman", Model->GetCurrentAnimationNumber(), Model->GetCurrentAnimationFrame()))
     {
@@ -2230,10 +2231,10 @@ void Player::Finisher_Beam(float elapsedTime)
         break;
     case 2:
         // カットイン開始
-        spr_CutIn0.Position.x = Calcu3D::LerpFloat(spr_CutIn0.Position.x, -1280.0f, 50.0f * elapsedTime);
-        if (spr_CutIn0.Position.x < -1275.0f)
+        spr_CutIn0.Position.x = Calcu3D::LerpFloat(spr_CutIn0.Position.x, -1285.0f, 50.0f * elapsedTime);
+        if (spr_CutIn0.Position.x < -1280.0f)
         {
-            spr_CutIn0.Position.x = -1275.0f;
+            spr_CutIn0.Position.x = -1280.0f;
             FinisherState++;
         }
         break;
@@ -2284,7 +2285,7 @@ void Player::Finisher_Beam(float elapsedTime)
         // ビーム打つ
         se[BEAMCHARGE]->Stop();
         se[BEAM]->Play(false, OptionSystem::Instance().GetSeVolume());
-
+        GamePad::Instance().SetVibration(1.0f,1.0f,3.0f);
         ID3D11Device* p_device = SceneManager::Instance().GetDevice();
 
         Light->SetRange(-4.0f);
@@ -2310,6 +2311,17 @@ void Player::Finisher_Beam(float elapsedTime)
             FinisherState++;
             FinisherRatio = 0.0f;
             Light->SetRange(30.0f);
+        }
+        {
+            const int intRatio = static_cast<int>(FinisherRatio) * 10;
+            switch (intRatio % 5)
+            {
+            case 0:
+                mCameraShakeFunc();
+                break;
+            default:
+                break;
+            }
         }
         break;
     case 9:
@@ -2385,10 +2397,10 @@ void Player::Finisher_BeamLight(float elapsedTime)
         break;
     case 2:
         // カットイン開始
-        spr_CutIn0.Position.x = Calcu3D::LerpFloat(spr_CutIn0.Position.x, -1280.0f, 50.0f * elapsedTime);
-        if (spr_CutIn0.Position.x < -1275.0f)
+        spr_CutIn0.Position.x = Calcu3D::LerpFloat(spr_CutIn0.Position.x, -1285.0f, 50.0f * elapsedTime);
+        if (spr_CutIn0.Position.x < -1280.0f)
         {
-            spr_CutIn0.Position.x = -1275.0f;
+            spr_CutIn0.Position.x = -1280.0f;
             FinisherState++;
         }
         break;
@@ -2589,6 +2601,7 @@ void Player::Finisher_Slash(float elapsedTime)
             Light->SetRange(30.0f);
             Model->f_PlayAnimation(AnimationName::wait, true);
             mAfterImage.Model->f_PlayAnimation(AnimationName::wait, true);
+            GamePad::Instance().SetVibration(1.0f,1.0f,0.5f);
         }
         break;
     case 12:
