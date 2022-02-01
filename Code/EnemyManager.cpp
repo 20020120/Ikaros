@@ -207,12 +207,12 @@ void EnemyManager::SetSpawnData(STAGE stage)
     // É}ÉNÉç
 #define SetSpawnDataMacro(Value) \
     if(stage == STAGE::STAGE##Value){\
-    if (spawn_timer.NowTime() >= easy_boss_time){\
+    if (spawn_timer.NowTime() >= (easy_boss_time + ((static_cast<int>(Value) == 2) ? -4.0f : 0.0f) )){\
         spawn_timer.Reset();\
         spawn_timer.Add(easy_boss_time);\
         GameSystem::Instance().RetryBoss(easy_boss_time);\
         spawn_datas = {\
-             { SpawnData{{easy_boss_time},{ENEMY_KIND::Boss##Value},{1},{{0.0f}},{{red}},{{0.0f}}}},\
+             { SpawnData{{easy_boss_time + ((static_cast<int>(Value) == 2) ? -4.0f : 0.0f)},{ENEMY_KIND::Boss##Value},{1},{{0.0f}},{{red}},{{0.0f}}}},\
         };\
         is_boss_battle = true;\
         return;\
@@ -254,7 +254,7 @@ void EnemyManager::SetSpawnData(STAGE stage)
 
     if (stage == STAGE::STAGE5)
     {
-        if (spawn_timer.NowTime() >= normal_boss_time)
+        if (spawn_timer.NowTime() >= normal_boss_time - 4.0f)
         {
             spawn_timer.Reset();
             spawn_timer.Add(normal_boss_time);
@@ -1033,7 +1033,7 @@ void EnemyManager::SetSpawnDatas_Stage1()
         {SpawnData{{14.7f},{E_K::Straight_None_Bezier_Side},                                 {1},    {{-29.0f}},                               {{red}}                          ,{{0.0f}}   }},
 
 
-        {SpawnData{{16.0f},{E_K::Straight_None_Start_Back},                                  {2},    {{7.0f,-7.0f}},                           {{red,red}}                          ,{{0.0f,0.0f}}   }},
+        {SpawnData{{16.0f},{E_K::Straight_None_Start_Back},                                  {2},    {{5.0f,-5.0f}},                           {{red,red}}                          ,{{0.0f,0.0f}}   }},
         {SpawnData{{16.7f},{E_K::Straight_None_Start_Back},                                  {2},    {{10.0f,-10.0f}},                         {{red,red}}                          ,{{0.0f,0.0f}}   }},
 
 
@@ -1042,7 +1042,7 @@ void EnemyManager::SetSpawnDatas_Stage1()
         {SpawnData{{19.8f},{E_K::Lock_MultiShot_E},                                         {1},    {{5.0f}},                                  {{red}}                          ,{{0.0f}}   }},
 
 
-        {SpawnData{{20.0f},{E_K::Straight_None_Start_Front},                                {4},    {{-5.0f,5.0f,-20.0f,20.0f}},               {{red,red,blue,blue}}            ,{{-10.0f,-10.0f,5.0f,5.0f}}   }},
+        {SpawnData{{20.0f},{E_K::Straight_None_Start_Front},                                {4},    {{-7.0f,7.0f,-20.0f,20.0f}},               {{red,red,blue,blue}}            ,{{-10.0f,-10.0f,5.0f,5.0f}}   }},
         
         {SpawnData{{25.2f},{E_K::Lock_MultiShot_B},                                         {2},    {{27.0f,-27.0f}},                          {{blue,blue}}                      ,{{0.0f,0.0f}}   }},
 
@@ -1371,7 +1371,7 @@ void EnemyManager::SetSpawnDatas_Stage2()
         {SpawnData{{75.2f},{E_K::Translate_Shot_B_Top},                                     {1},    {{22.0f}},                                 {{red}}                         ,{{0.0f}}   }},
         
 
-        { SpawnData{{easy_boss_time},{E_K::Boss2},                                                     {1},    {{0.0f}},                                 {{blue}}                          ,{{0.0f}}   } },
+        { SpawnData{{easy_boss_time - 4.0f},{E_K::Boss2},                                                     {1},    {{0.0f}},                                 {{blue}}                          ,{{0.0f}}   } },
 
         // 60ïbåoâﬂ
         // 90ïbåoâﬂ
@@ -2880,7 +2880,7 @@ void EnemyManager::SetSpawnDatas_Stage5()
             
 
 
-        { SpawnData{{normal_boss_time},{E_K::Boss_Ex3},                                                    {1},    {{0.0f}},                                 {{red}}                          ,{{0.0f}}   } },
+        { SpawnData{{normal_boss_time - 4.0f},{E_K::Boss_Ex3},                                                    {1},    {{0.0f}},                                 {{red}}                          ,{{0.0f}}   } },
 
     };
 }

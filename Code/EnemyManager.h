@@ -243,8 +243,8 @@ private:
     void GuiMenu();
 
 private:
-    static constexpr float easy_boss_time   = 86.0f;
-    static constexpr float normal_boss_time = 125.0f;
+    static constexpr float easy_boss_time   = 86.0f + 4.0f;
+    static constexpr float normal_boss_time = 125.0f + 4.0f;
 
 
 private:
