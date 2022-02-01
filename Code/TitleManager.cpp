@@ -476,7 +476,7 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
 
 
     // アニメーション更新
-    if (animation_timer.NowTime() > 0.07f)
+    if (animation_timer.NowTime() > 0.15f)
     {
         animation_timer.Reset();
 
