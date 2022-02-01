@@ -300,8 +300,8 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
 
     float alpha[13] = { 0.5f,0.5f,0.5f,0.5f,0.5f, 0.5f,0.5f,0.5f,0.5f,0.5f, 0.5f,0.5f,0.5f/*,0.5f,0.5f*//*,0.5f*/ };
 
-    constexpr DirectX::XMFLOAT2 pos = { 950.0f,400.0f };
-    constexpr DirectX::XMFLOAT2 scale = { 0.7f,0.7f };
+    constexpr DirectX::XMFLOAT2 pos = { 810.0f,400.0f };
+    constexpr DirectX::XMFLOAT2 scale = { 0.9f,0.9f };
     //constexpr float height = 40.0f;
 
     const float tex_size_x  = SprSelect[0]->GetTextureWidth(); 
@@ -408,15 +408,15 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
         }
 
         // 表示位置の補間用変数
-        // const float& time = lerp_timer;
-        // const float ratio = time / lerp_timer_max;
-        // const float inverse_ratio = 1.0f - ratio;
+        const float& time = lerp_timer;
+        const float ratio = time / lerp_timer_max;
+        const float inverse_ratio = 1.0f - ratio;
 
 
         // 描画
         for (int i = 0; i < 6; ++i)
         {
-            constexpr DirectX::XMFLOAT2 target_translate = { 340.0f,0.0f };
+            constexpr DirectX::XMFLOAT2 target_translate = { 510.0f,0.0f };
 
             // スタート画面
             if (i < 3)
@@ -432,7 +432,7 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
 
                 SprSelect[j]->Begin(dc);
                 SprSelect[j]->Render(dc,
-                    pos.x, pos.y + i * height,
+                    pos.x + -target_translate.x * inverse_ratio, pos.y + i * height + -target_translate.y * inverse_ratio,
                     scale.x, scale.y,
                     0.0f, 0.0f,
                     tex_size_x, tex_size_y,
@@ -442,7 +442,7 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
                 SprSelect[j]->End(dc);
             }
             
-            constexpr float pudding = -40.0f;
+            constexpr float pudding = -140.0f;
 
             // ステージ選択画面
             //text_length = wcslen(button[i + 7]);
@@ -456,7 +456,7 @@ void TitleManager::RenderFonts(ID3D11DeviceContext* dc)
 
             SprSelect[k]->Begin(dc);
             SprSelect[k]->Render(dc,
-                pos.x, pos.y + i * height,
+                pos.x + target_translate.x * ratio + 75.0f, pos.y + i * height + target_translate.y * ratio + pudding,
                 scale.x, scale.y,
                 0.0f, 0.0f,
                 tex_size_x, tex_size_y,
