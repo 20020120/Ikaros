@@ -58,7 +58,7 @@ public:
 
     // 必殺技かどうか
     bool GetIsFinisher() const { return IsFinisher; }
-
+    bool GetIsBeamFinisher() { return  IsBeamFinisher; }
 
     //縦横切り替えの際の補正
     void ChangeCameraDirCorrect();
@@ -294,7 +294,7 @@ private:
     float FinisherDamage = { 4.0f };
     bool EnemiesStop{}; // 敵の動きを止める
 
-    
+    bool IsBeamFinisher{};
     //--------------------<ヒットストップ>--------------------//
     float StackHitStopSeconds{}; // ヒットストップの経過時間
     const float HitStopSecond{ 0.2f };

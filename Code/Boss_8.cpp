@@ -330,7 +330,7 @@ void Boss_8::FirstMotion(float elapsedTime)
 
             if(!IsRoar)
             {
-                se[0]->Play(false);
+                se[Shout2]->Play(false);
                 IsRoar = true;
             }
             ZoomPower += elapsedTime * 100.0f;
@@ -576,7 +576,7 @@ void Boss_8::ChangeView(float elapsedTime)
 
             if (!IsRoar)
             {
-                se[0]->Play(false);
+                se[Shout2]->Play(false);
                 IsRoar = true;
             }
             ZoomPower += elapsedTime * 100.0f;

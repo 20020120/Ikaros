@@ -147,7 +147,7 @@ void SceneGame::Update(float elapsedTime)
 
     //****************************************************************
     // 
-    //  ƒvƒŒƒCƒ„[‚Ì•KŽE‹Z
+    //  ƒvƒŒƒCƒ„[‚Ì•KŽE‹Z\
     // 
     //****************************************************************
 
@@ -269,7 +269,11 @@ void SceneGame::Render(ID3D11DeviceContext* dc)
     {
         draw = true;
     }
-    player->Render2D(dc,draw);
+    player->Render2D(dc, draw);
+    if(player->GetIsBeamFinisher())
+    {
+        draw = false;
+    }
     GameSystem::Instance().SetFrameDraw(draw);
     EnemyManager::Instance().Render2D(dc);
 
